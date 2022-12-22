@@ -55,7 +55,21 @@ func (w *ProtoWriter) Err() error {
 	return w.err
 }
 
+func (w *ProtoWriter) WriteHeader(packageName string, goPackageName string) {
+	w.format("syntax = %q;\n", "proto3")
+	w.format("\n")
+	w.format("package %s;\n", packageName)
+	w.format("\n")
+	w.format("option go_package = %q;\n", goPackageName)
+	w.format("\n")
+}
+
+func (w *ProtoWriter) WriteImport(p string) {
+	w.format("import %q;\n", p)
+}
+
 func (w *ProtoWriter) WriteMessage(m *descriptorpb.DescriptorProto) {
+	w.format("\n")
 	w.format("message %s {\n", m.GetName())
 	for _, field := range m.Field {
 		w.writeField(m, field)
@@ -118,7 +132,8 @@ func (w *ProtoWriter) writeType(fd *descriptorpb.FieldDescriptorProto) {
 func (w *ProtoWriter) writeMapField(parent *descriptorpb.DescriptorProto, fd *descriptorpb.FieldDescriptorProto, mapType *descriptorpb.DescriptorProto) {
 	w.format("  ")
 
-	w.format("optional ")
+	// optional is implicit
+	// w.format("optional ")
 
 	w.format("map<")
 	var keyField *descriptorpb.FieldDescriptorProto

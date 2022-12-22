@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"go/ast"
 	"go/token"
@@ -9,6 +10,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"unicode"
 
 	"golang.org/x/tools/go/analysis"
@@ -37,7 +39,8 @@ import (
 
 func main() {
 	var g Generator
-	g.out = &ProtoWriter{w: os.Stdout}
+	g.packages = make(map[string]*packageState)
+
 	var analyzer = &analysis.Analyzer{
 		Name:     "genproto",
 		Doc:      "generate proto output",
@@ -47,24 +50,100 @@ func main() {
 	singlechecker.Main(analyzer)
 }
 
+func (g *Generator) getPackage(pkg *types.Package) *packageState {
+	pkgPath := pkg.Path()
+	pkgInfo := g.packages[pkgPath]
+	if pkgInfo == nil {
+		pkgInfo = &packageState{
+			done:    make(map[*ast.StructType]bool),
+			imports: make(map[string]bool),
+		}
+		g.packages[pkgPath] = pkgInfo
+	}
+	return pkgInfo
+}
+
+type packageState struct {
+	packageGenerateProto bool
+
+	done map[*ast.StructType]bool
+
+	messages []*descriptorpb.DescriptorProto
+	imports  map[string]bool
+}
+
 type Generator struct {
 	*analysis.Pass
 	// Inspector *inspector.Inspector
-	out *ProtoWriter
+	pkg *packageState
+
+	mutex sync.Mutex
+
+	packages map[string]*packageState
 }
 
 func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
+	g.mutex.Lock()
+	defer g.mutex.Unlock()
+
 	// inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 	// g.Inspector = inspect
 	g.Pass = pass
-	return nil, g.visitPass(pass)
+	packageState := g.getPackage(pass.Pkg)
+	g.pkg = packageState
+	if err := g.visitPass(pass); err != nil {
+		return nil, err
+	}
+
+	if len(packageState.messages) != 0 {
+		pkgPath := pass.Pkg.Path()
+		p := filepath.Join("generated", pkgPath, "generated.proto")
+
+		var b bytes.Buffer
+
+		out := &ProtoWriter{
+			w: &b,
+		}
+
+		packageName := g.protoNameForPackage(pass.Pkg)
+
+		goPackageName := pass.Pkg.Path()
+
+		out.WriteHeader(packageName, goPackageName)
+
+		for imported := range packageState.imports {
+			if imported == pass.Pkg.Path() {
+				continue
+			}
+			out.WriteImport(imported + "/generated.proto")
+		}
+
+		for _, msg := range packageState.messages {
+			out.WriteMessage(msg)
+		}
+		if err := out.Err(); err != nil {
+			return nil, err
+		}
+
+		d := filepath.Dir(p)
+		if err := os.MkdirAll(d, 0755); err != nil {
+			return nil, fmt.Errorf("error creating directories %q: %w", d, err)
+		}
+
+		klog.Infof("writing file %q", p)
+		if err := os.WriteFile(p, b.Bytes(), 0644); err != nil {
+			return nil, fmt.Errorf("error writing %q: %w", p, err)
+		}
+	}
+
+	return nil, nil
 }
 
 func (g *Generator) visitPass(pass *analysis.Pass) error {
 	packageName := pass.Pkg.Name()
 	klog.Infof("package %q", packageName)
 
-	generate := false
+	packageState := g.getPackage(pass.Pkg)
 
 	for _, file := range pass.Files {
 		tokenFile := pass.Fset.File(file.Package)
@@ -88,15 +167,16 @@ func (g *Generator) visitPass(pass *analysis.Pass) error {
 			for _, commentLine := range comment.List {
 				line := commentLine.Text
 				if strings.Contains(line, "k8s:protobuf-gen") {
-					generate = true
+					packageState.packageGenerateProto = true
+				}
+
+				if strings.Contains(line, "+groupName=") {
+					// meta/v1 doesn't have a protobuf-gen declaration?
+					packageState.packageGenerateProto = true
 				}
 				// klog.Infof("comment: %v", commentLine.Text)
 			}
 		}
-	}
-
-	if !generate {
-		return nil
 	}
 
 	inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
@@ -282,6 +362,20 @@ func (g *Generator) visitGenDecl(decl *ast.GenDecl) error {
 // }
 
 func (g *Generator) visitTypeSpec(spec *ast.TypeSpec) error {
+	generateProto := g.pkg.packageGenerateProto
+	switch spec.Name.String() {
+	case "Table", "TableRow", "TableRowCondition", "TableColumnDefinition":
+		klog.Warningf("TODO: Should handle protobuf=false comment, hard-coding type %q", spec.Name.String())
+		generateProto = false
+	case "IntOrString", "RawExtension":
+		klog.Warningf("TODO: Should handle protobuf=true comment, hard-coding type %q", spec.Name.String())
+		generateProto = true
+	}
+
+	if !generateProto {
+		return nil
+	}
+
 	// klog.Infof("  spec  %+v", spec)
 	name := spec.Name.Name
 	switch specType := spec.Type.(type) {
@@ -319,7 +413,10 @@ func (g *Generator) visitTypeSpec(spec *ast.TypeSpec) error {
 }
 
 func (g *Generator) visitStructType(name string, spec *ast.StructType) error {
-
+	if g.pkg.done[spec] {
+		return nil
+	}
+	g.pkg.done[spec] = true
 	// // ReplicaSetStatus represents the current status of a ReplicaSet.
 	// message ReplicaSetStatus {
 	// 	// Replicas is the most recently observed number of replicas.
@@ -375,23 +472,36 @@ func (g *Generator) visitStructType(name string, spec *ast.StructType) error {
 		f := &descriptorpb.FieldDescriptorProto{
 			Name: &name,
 		}
-		if err := g.populateProtoFieldDescriptor(msg, f, field.Type); err != nil {
-			return err
-		}
 
 		if field.Tag != nil {
 			if err := g.populateProtoFieldFromTag(f, field.Tag); err != nil {
 				return err
 			}
 		}
+		if f.GetNumber() == 0 {
+			klog.Warningf("skipping field with no proto tag")
+			continue
+		}
+
+		if err := g.populateProtoFieldDescriptor(msg, f, field.Type); err != nil {
+			return err
+		}
+
+		if field.Tag != nil {
+			// process again to put back the names etc
+			if err := g.populateProtoFieldFromTag(f, field.Tag); err != nil {
+				return err
+			}
+		}
+
 		// klog.Infof("%s %s", field.Names, field.Type)
 		msg.Field = append(msg.Field, f)
 	}
 
 	// klog.Infof("  msg  %s", prototext.Format(msg))
 
-	g.out.WriteMessage(msg)
-	return g.out.Err()
+	g.pkg.messages = append(g.pkg.messages, msg)
+	return nil
 }
 
 func (g *Generator) visitIdent(name string, spec *ast.Ident) error {
@@ -452,13 +562,21 @@ func (g *Generator) populateProtoFieldDescriptorWithTypeInfo(msg *descriptorpb.D
 		switch underlying := typeInfo.Underlying().(type) {
 		case *types.Struct:
 			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum()
-			typeName = typeInfo.String()
+			pkg := typeInfo.Obj().Pkg()
+			if pkg != g.Pass.Pkg {
+				g.pkg.imports[pkg.Path()] = true
+			}
+			typeName = g.protoNameForMessage(typeInfo)
 		case *types.Basic:
 			return g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, underlying)
 		case *types.Map:
 			return g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, underlying)
+		case *types.Slice:
+			return g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, underlying)
+		// case *types.Interface:
+		// 	return g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, underlying)
 		default:
-			return fmt.Errorf("unhandled named type underlying %T", underlying)
+			return fmt.Errorf("unhandled named type underlying %T %v name=%s", underlying, typeInfo.String(), fd.GetName())
 		}
 	case *types.Basic:
 		switch typeInfo.Kind() {
@@ -500,13 +618,34 @@ func (g *Generator) populateProtoFieldDescriptorWithTypeInfo(msg *descriptorpb.D
 		return nil
 
 	default:
-		return fmt.Errorf("unhandled typeInfo.Type %T", typeInfo)
+		return fmt.Errorf("unhandled typeInfo.Type %T %v name=%q", typeInfo, typeInfo.String(), fd.GetName())
 	}
 	if typeName != "" {
 		fd.TypeName = &typeName
 	}
 
 	return nil
+}
+
+func (g *Generator) protoNameForMessage(n *types.Named) string {
+	name := n.Obj().Name()
+	pkg := n.Obj().Pkg()
+	if pkg == g.Pass.Pkg {
+		return name
+	}
+	pkgName := g.protoNameForPackage(pkg)
+	return pkgName + "." + name
+}
+
+func (g *Generator) protoNameForPackage(pkg *types.Package) string {
+	pkgName := pkg.Path()
+	pkgName = strings.ReplaceAll(pkgName, "/", ".")
+
+	// switch pkgName {
+	// case "k8s.io.apimachinery.pkg.runtime":
+	// 	pkgName = "apis.runtime"
+	// }
+	return pkgName
 }
 
 func (g *Generator) populateMap(msg *descriptorpb.DescriptorProto, fd *descriptorpb.FieldDescriptorProto, mapType *types.Map) error {
@@ -609,7 +748,7 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 							fd.Type = descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum()
 
 						default:
-							return fmt.Errorf("TODO: How do we specify bytes encoding for %v?", formatProto(fd))
+							klog.Warningf("TODO: How do we specify bytes encoding for %v?", formatProto(fd))
 						}
 					case "varint":
 						switch fd.GetType() {
@@ -620,7 +759,7 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 						case descriptorpb.FieldDescriptorProto_TYPE_BOOL:
 							// ok
 						default:
-							return fmt.Errorf("TODO: How do we specify varint encoding for %v?", formatProto(fd))
+							klog.Warningf("TODO: How do we specify varint encoding for %v?", formatProto(fd))
 						}
 					default:
 						return fmt.Errorf("unexpected protobuf tag %q", tag)

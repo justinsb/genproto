@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package k8s.io.apimachinery.pkg.runtime;
+
+option go_package = "k8s.io/apimachinery/pkg/runtime";
+
+
+message RawExtension {
+  optional bytes raw = 1 [json_name = "-"];
+}
