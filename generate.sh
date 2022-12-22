@@ -40,12 +40,11 @@ pushd generated
 protoc --experimental_allow_proto3_optional -I. --go_out=. --go_opt=paths=source_relative k8s.io/apimachinery/pkg/apis/meta/v1/*.proto
 popd
 
-go run . -- ../api/core/v1
+go run . -- ../api/...
 pushd generated
 protoc --experimental_allow_proto3_optional -I. --go_out=. --go_opt=paths=source_relative k8s.io/api/core/v1/*.proto
 popd
 
-go run . -- ../api/apps/v1
 pushd generated
 protoc --experimental_allow_proto3_optional -I. --go_out=. --go_opt=paths=source_relative k8s.io/api/apps/v1/*.proto
 popd

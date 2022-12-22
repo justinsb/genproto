@@ -8,15 +8,14 @@ import (
 	"go/types"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
 	"unicode"
 
 	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/analysis/singlechecker"
-	"golang.org/x/tools/go/ast/inspector"
 
 	"google.golang.org/protobuf/types/descriptorpb"
 	"k8s.io/klog/v2"
@@ -42,10 +41,10 @@ func main() {
 	g.packages = make(map[string]*packageState)
 
 	var analyzer = &analysis.Analyzer{
-		Name:     "genproto",
-		Doc:      "generate proto output",
-		Run:      g.Run,
-		Requires: []*analysis.Analyzer{inspect.Analyzer},
+		Name: "genproto",
+		Doc:  "generate proto output",
+		Run:  g.Run,
+		// Requires: []*analysis.Analyzer{inspect.Analyzer},
 	}
 	singlechecker.Main(analyzer)
 }
@@ -111,11 +110,19 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 
 		out.WriteHeader(packageName, goPackageName)
 
-		for imported := range packageState.imports {
-			if imported == pass.Pkg.Path() {
-				continue
+		if len(packageState.imports) != 0 {
+			var imports []string
+			for imported := range packageState.imports {
+				if imported == pass.Pkg.Path() {
+					continue
+				}
+				imports = append(imports, imported)
 			}
-			out.WriteImport(imported + "/generated.proto")
+			sort.Strings(imports)
+
+			for _, imported := range imports {
+				out.WriteImport(imported + "/generated.proto")
+			}
 		}
 
 		for _, msg := range packageState.messages {
@@ -179,34 +186,50 @@ func (g *Generator) visitPass(pass *analysis.Pass) error {
 		}
 	}
 
-	inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
-	var errors []error
-	inspect.Nodes(nil, func(n ast.Node, push bool) bool {
-		if !push {
-			return true
+	for _, f := range pass.Files {
+		tokenFile := pass.Fset.File(f.Pos())
+		fileName := filepath.Base(tokenFile.Name())
+		if strings.HasSuffix(fileName, "_test.go") {
+			continue
 		}
 
-		switch n := n.(type) {
-		case *ast.File:
-			tokenFile := pass.Fset.File(n.Pos())
-			fileName := filepath.Base(tokenFile.Name())
-			if strings.HasSuffix(fileName, "_test.go") {
-				return false
+		for _, n := range f.Decls {
+			switch n := n.(type) {
+			case *ast.GenDecl:
+				if err := g.visitGenDecl(n); err != nil {
+					return err
+				}
 			}
-			return true
-
-		case *ast.GenDecl:
-			if err := g.visitGenDecl(n); err != nil {
-				errors = append(errors, err)
-				return false
-			}
-			return false
 		}
-		return false
+	}
+	// // inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
+	// var errors []error
+	// inspect.Nodes(nil, func(n ast.Node, push bool) bool {
+	// 	if !push {
+	// 		return true
+	// 	}
 
-		// klog.Infof("file %q", tokenFile.Name())
+	// 	switch n := n.(type) {
+	// 	case *ast.File:
+	// 		tokenFile := pass.Fset.File(n.Pos())
+	// 		fileName := filepath.Base(tokenFile.Name())
+	// 		if strings.HasSuffix(fileName, "_test.go") {
+	// 			return false
+	// 		}
+	// 		return true
 
-	})
+	// 	case *ast.GenDecl:
+	// 		if err := g.visitGenDecl(n); err != nil {
+	// 			errors = append(errors, err)
+	// 			return false
+	// 		}
+	// 		return false
+	// 	}
+	// 	return false
+
+	// 	// klog.Infof("file %q", tokenFile.Name())
+
+	// })
 
 	// for _, file := range pass.Files {
 	// 	tokenFile := pass.Fset.File(file.Package)
@@ -247,10 +270,11 @@ func (g *Generator) visitPass(pass *analysis.Pass) error {
 	// 		}
 	// 	}
 	// }
-	if len(errors) == 0 {
-		return nil
-	}
-	return errors[0]
+	// if len(errors) == 0 {
+	// 	return nil
+	// }
+	// return errors[0]
+	return nil
 }
 
 func (g *Generator) visitGenDecl(decl *ast.GenDecl) error {
@@ -812,6 +836,14 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 			tag = strings.TrimSuffix(tag, "\"")
 			tokens := strings.Split(tag, ",")
 			klog.Infof("ignoring patchMergeKey tag %v", tokens)
+		} else if strings.HasPrefix(tag, "listType:\"") {
+			if !strings.HasSuffix(tag, "\"") {
+				return fmt.Errorf("unimplemented tag %+v", tag)
+			}
+			tag = strings.TrimPrefix(tag, "listType:\"")
+			tag = strings.TrimSuffix(tag, "\"")
+			tokens := strings.Split(tag, ",")
+			klog.Infof("ignoring listTag tag %v", tokens)
 		} else {
 			return fmt.Errorf("unimplemented tag %+v", tag)
 		}
