@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"strings"
 
 	"google.golang.org/protobuf/types/descriptorpb"
 )
@@ -16,7 +15,7 @@ func formatProto(o interface{}) string {
 	case *descriptorpb.DescriptorProto:
 		w.WriteMessage(o)
 	case *descriptorpb.FieldDescriptorProto:
-		w.WriteField(o)
+		w.writeField(&descriptorpb.DescriptorProto{}, o)
 	default:
 		return fmt.Sprintf("<unhandled type %T>", o)
 	}
@@ -59,42 +58,93 @@ func (w *ProtoWriter) Err() error {
 func (w *ProtoWriter) WriteMessage(m *descriptorpb.DescriptorProto) {
 	w.format("message %s {\n", m.GetName())
 	for _, field := range m.Field {
-		w.WriteField(field)
+		w.writeField(m, field)
 	}
 	w.format("}\n")
 }
 
-func (w *ProtoWriter) WriteField(m *descriptorpb.FieldDescriptorProto) {
-	var s strings.Builder
-	s.WriteString("  ")
+func (w *ProtoWriter) writeField(msg *descriptorpb.DescriptorProto, m *descriptorpb.FieldDescriptorProto) {
+	// Check for map
+	if m.GetType() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
+		typeName := m.GetTypeName()
+		for _, nestedType := range msg.NestedType {
+			if nestedType.GetName() == typeName {
+				if nestedType.GetOptions().GetMapEntry() {
+					w.writeMapField(msg, m, nestedType)
+					return
+				}
+			}
+		}
+	}
+
+	w.format("  ")
 	switch m.GetLabel() {
 	case descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL:
-		s.WriteString("optional ")
+		w.format("optional ")
 	case descriptorpb.FieldDescriptorProto_LABEL_REQUIRED:
-		s.WriteString("required ")
+		w.format("required ")
 	case descriptorpb.FieldDescriptorProto_LABEL_REPEATED:
-		s.WriteString("repeated ")
+		w.format("repeated ")
 	default:
 		w.error(fmt.Errorf("unexpected label %v", m.GetLabel()))
 	}
-	switch m.GetType() {
-	case descriptorpb.FieldDescriptorProto_TYPE_STRING:
-		s.WriteString("string ")
-	case descriptorpb.FieldDescriptorProto_TYPE_BOOL:
-		s.WriteString("bool ")
-	case descriptorpb.FieldDescriptorProto_TYPE_DOUBLE:
-		s.WriteString("double ")
-	case descriptorpb.FieldDescriptorProto_TYPE_INT32:
-		s.WriteString("int32 ")
-	case descriptorpb.FieldDescriptorProto_TYPE_INT64:
-		s.WriteString("int64 ")
-	case descriptorpb.FieldDescriptorProto_TYPE_BYTES:
-		s.WriteString("bytes ")
-	case descriptorpb.FieldDescriptorProto_TYPE_MESSAGE:
-		s.WriteString(m.GetTypeName() + " ")
-	default:
-		w.error(fmt.Errorf("unexpected type %v", m.GetType()))
+	w.writeType(m)
+	w.format(" %s = %d", m.GetName(), m.GetNumber())
+	if m.JsonName != nil {
+		w.format(" [json_name = %q]", m.GetJsonName())
 	}
-	w.write(s.String())
-	w.format("%s = %d;\n", m.GetName(), m.GetNumber())
+	w.format(";\n")
+}
+
+func (w *ProtoWriter) writeType(fd *descriptorpb.FieldDescriptorProto) {
+	switch fd.GetType() {
+	case descriptorpb.FieldDescriptorProto_TYPE_STRING:
+		w.format("string")
+	case descriptorpb.FieldDescriptorProto_TYPE_BOOL:
+		w.format("bool")
+	case descriptorpb.FieldDescriptorProto_TYPE_INT32:
+		w.format("int32")
+	case descriptorpb.FieldDescriptorProto_TYPE_INT64:
+		w.format("int64")
+	case descriptorpb.FieldDescriptorProto_TYPE_BYTES:
+		w.format("bytes")
+	case descriptorpb.FieldDescriptorProto_TYPE_MESSAGE:
+		w.format(fd.GetTypeName())
+	default:
+		w.error(fmt.Errorf("unexpected type %v", fd.GetType()))
+	}
+}
+
+func (w *ProtoWriter) writeMapField(parent *descriptorpb.DescriptorProto, fd *descriptorpb.FieldDescriptorProto, mapType *descriptorpb.DescriptorProto) {
+	w.format("  ")
+
+	w.format("optional ")
+
+	w.format("map<")
+	var keyField *descriptorpb.FieldDescriptorProto
+	var valueField *descriptorpb.FieldDescriptorProto
+	for _, field := range mapType.Field {
+		switch field.GetName() {
+		case "key":
+			keyField = field
+		case "value":
+			valueField = field
+		default:
+			w.error(fmt.Errorf("unexpected field %q in %q map", field.GetName(), fd.GetName()))
+		}
+	}
+	if keyField == nil || valueField == nil {
+		w.error(fmt.Errorf("missing key/value field in %q map", fd.GetName()))
+	}
+
+	w.writeType(keyField)
+	w.format(", ")
+	w.writeType(valueField)
+	w.format("> ")
+
+	w.format("%s = %d", fd.GetName(), fd.GetNumber())
+	if fd.JsonName != nil {
+		w.format(" [json_name = %q]", fd.GetJsonName())
+	}
+	w.format(";\n")
 }

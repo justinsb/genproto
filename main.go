@@ -6,14 +6,18 @@ import (
 	"go/token"
 	"go/types"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"unicode"
 
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/analysis/singlechecker"
-	"k8s.io/klog/v2"
+	"golang.org/x/tools/go/ast/inspector"
 
 	"google.golang.org/protobuf/types/descriptorpb"
+	"k8s.io/klog/v2"
 )
 
 // func main() {
@@ -35,56 +39,164 @@ func main() {
 	var g Generator
 	g.out = &ProtoWriter{w: os.Stdout}
 	var analyzer = &analysis.Analyzer{
-		Name: "genproto",
-		Doc:  "generate proto output",
-		Run:  g.Run,
+		Name:     "genproto",
+		Doc:      "generate proto output",
+		Run:      g.Run,
+		Requires: []*analysis.Analyzer{inspect.Analyzer},
 	}
 	singlechecker.Main(analyzer)
 }
 
 type Generator struct {
 	*analysis.Pass
+	// Inspector *inspector.Inspector
 	out *ProtoWriter
 }
 
 func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
+	// inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
+	// g.Inspector = inspect
 	g.Pass = pass
 	return nil, g.visitPass(pass)
 }
 
 func (g *Generator) visitPass(pass *analysis.Pass) error {
+	packageName := pass.Pkg.Name()
+	klog.Infof("package %q", packageName)
+
+	generate := false
+
 	for _, file := range pass.Files {
-		for _, decl := range file.Decls {
-			switch decl := decl.(type) {
-			case *ast.GenDecl:
-				switch decl.Tok {
-				case token.TYPE:
-					// klog.Infof("type %+v", decl)
-					for _, spec := range decl.Specs {
-						switch spec := spec.(type) {
-						case *ast.TypeSpec:
-							if err := g.visitTypeSpec(spec); err != nil {
-								return err
-							}
-						default:
-							return fmt.Errorf("unhandled spec type %T", spec)
-						}
-					}
-				case token.IMPORT:
-					//klog.Infof("ast.Import")
-				case token.VAR:
-				//	klog.Infof("ast.Var")
-				case token.CONST:
-					//klog.Infof("ast.Const")
-				default:
-					return fmt.Errorf("unhandled GenDecl.Type=%v", decl.Tok)
+		tokenFile := pass.Fset.File(file.Package)
+		fileName := filepath.Base(tokenFile.Name())
+		if strings.HasSuffix(fileName, "_test.go") {
+			continue
+		}
+		// klog.Infof("file %q", tokenFile.Name())
+
+		// if file.Doc != nil {
+		// 	for _, commentLine := range file.Doc.List {
+		// 		line := commentLine.Text
+		// 		if strings.Contains(line, "k8s:protobuf-gen") {
+		// 			generate = true
+		// 		}
+		// 		klog.Infof("comment: %v", commentLine.Text)
+		// 	}
+		// }
+
+		for _, comment := range file.Comments {
+			for _, commentLine := range comment.List {
+				line := commentLine.Text
+				if strings.Contains(line, "k8s:protobuf-gen") {
+					generate = true
 				}
-			case *ast.FuncDecl:
-			default:
-				return fmt.Errorf("unhandled type %T", decl)
+				// klog.Infof("comment: %v", commentLine.Text)
 			}
 		}
 	}
+
+	if !generate {
+		return nil
+	}
+
+	inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
+	var errors []error
+	inspect.Nodes(nil, func(n ast.Node, push bool) bool {
+		if !push {
+			return true
+		}
+
+		switch n := n.(type) {
+		case *ast.File:
+			tokenFile := pass.Fset.File(n.Pos())
+			fileName := filepath.Base(tokenFile.Name())
+			if strings.HasSuffix(fileName, "_test.go") {
+				return false
+			}
+			return true
+
+		case *ast.GenDecl:
+			if err := g.visitGenDecl(n); err != nil {
+				errors = append(errors, err)
+				return false
+			}
+			return false
+		}
+		return false
+
+		// klog.Infof("file %q", tokenFile.Name())
+
+	})
+
+	// for _, file := range pass.Files {
+	// 	tokenFile := pass.Fset.File(file.Package)
+	// 	fileName := filepath.Base(tokenFile.Name())
+	// 	if strings.HasSuffix(fileName, "_test.go") {
+	// 		continue
+	// 	}
+	// 	// klog.Infof("file %q", tokenFile.Name())
+
+	// 	for _, decl := range file.Decls {
+	// 		switch decl := decl.(type) {
+	// 		case *ast.GenDecl:
+	// 			switch decl.Tok {
+	// 			case token.TYPE:
+	// 				// klog.Infof("type %+v", decl)
+	// 				for _, spec := range decl.Specs {
+	// 					switch spec := spec.(type) {
+	// 					case *ast.TypeSpec:
+	// 						if err := g.visitTypeSpec(spec); err != nil {
+	// 							return err
+	// 						}
+	// 					default:
+	// 						return fmt.Errorf("unhandled spec type %T", spec)
+	// 					}
+	// 				}
+	// 			case token.IMPORT:
+	// 				//klog.Infof("ast.Import")
+	// 			case token.VAR:
+	// 			//	klog.Infof("ast.Var")
+	// 			case token.CONST:
+	// 				//klog.Infof("ast.Const")
+	// 			default:
+	// 				return fmt.Errorf("unhandled GenDecl.Type=%v", decl.Tok)
+	// 			}
+	// 		case *ast.FuncDecl:
+	// 		default:
+	// 			return fmt.Errorf("unhandled type %T", decl)
+	// 		}
+	// 	}
+	// }
+	if len(errors) == 0 {
+		return nil
+	}
+	return errors[0]
+}
+
+func (g *Generator) visitGenDecl(decl *ast.GenDecl) error {
+	switch decl.Tok {
+	case token.TYPE:
+		// klog.Infof("type %+v", decl)
+		for _, spec := range decl.Specs {
+			switch spec := spec.(type) {
+			case *ast.TypeSpec:
+				if err := g.visitTypeSpec(spec); err != nil {
+					return err
+				}
+			default:
+				return fmt.Errorf("unhandled spec type %T", spec)
+			}
+		}
+	case token.IMPORT:
+		//klog.Infof("ast.Import")
+	case token.VAR:
+	//	klog.Infof("ast.Var")
+	case token.CONST:
+		//klog.Infof("ast.Const")
+	default:
+		return fmt.Errorf("unhandled GenDecl.Type=%v", decl.Tok)
+	}
+
 	return nil
 }
 
@@ -185,6 +297,20 @@ func (g *Generator) visitTypeSpec(spec *ast.TypeSpec) error {
 		// ignore
 		return nil
 
+	case *ast.InterfaceType:
+		// ignore interfaces
+		return nil
+
+	case *ast.ArrayType:
+		// e.g. type expiringHeap []*expiringHeapEntry
+		//ignore
+		return nil
+
+	case *ast.FuncType:
+		// e.g. type ConditionFunc func() (done bool, err error)
+		// ignore
+		return nil
+
 	case *ast.Ident:
 		return g.visitIdent(name, specType)
 	default:
@@ -223,6 +349,10 @@ func (g *Generator) visitStructType(name string, spec *ast.StructType) error {
 	// 	repeated ReplicaSetCondition conditions = 6;
 	//   }
 
+	if !isExported(name) {
+		return nil
+	}
+
 	msg := &descriptorpb.DescriptorProto{}
 	msg.Name = PtrTo(name)
 
@@ -239,10 +369,13 @@ func (g *Generator) visitStructType(name string, spec *ast.StructType) error {
 			name = name + n.Name
 		}
 
+		if !isExported(name) {
+			continue
+		}
 		f := &descriptorpb.FieldDescriptorProto{
 			Name: &name,
 		}
-		if err := g.populateProtoFieldDescriptor(f, field.Type); err != nil {
+		if err := g.populateProtoFieldDescriptor(msg, f, field.Type); err != nil {
 			return err
 		}
 
@@ -266,21 +399,67 @@ func (g *Generator) visitIdent(name string, spec *ast.Ident) error {
 	return nil
 }
 
-func (g *Generator) populateProtoFieldDescriptor(fd *descriptorpb.FieldDescriptorProto, fieldType ast.Expr) error {
-	typeInfo, ok := g.TypesInfo.Types[fieldType]
-	if !ok {
-		return fmt.Errorf("no type info for %v", fieldType)
-	}
+func (g *Generator) populateProtoFieldDescriptor(msg *descriptorpb.DescriptorProto, fd *descriptorpb.FieldDescriptorProto, fieldType ast.Expr) error {
 	fd.Label = descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum()
-	return g.populateProtoFieldDescriptorType(fd, typeInfo.Type)
+
+	typeInfo, ok := g.TypesInfo.Types[fieldType]
+	if ok {
+		return g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, typeInfo.Type)
+	}
+
+	switch fieldType := fieldType.(type) {
+	case *ast.Ident:
+		switch fieldType.String() {
+		case "string":
+			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_STRING.Enum()
+			return nil
+		case "bool":
+			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_BOOL.Enum()
+			return nil
+		case "int64":
+			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_INT64.Enum()
+			return nil
+		case "int32":
+			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_INT32.Enum()
+			return nil
+		}
+	}
+	// if starExpr, ok := fieldType.(*ast.StarExpr); ok {
+	// 	fd.Proto3Optional = PtrTo(true)
+	// 	return g.populateProtoFieldDescriptor(fd, starExpr.X)
+	// }
+	// if arrayType, ok := fieldType.(*ast.ArrayType); ok {
+	// 	fd.Label = descriptorpb.FieldDescriptorProto_LABEL_REPEATED.Enum()
+	// 	return g.populateProtoFieldDescriptor(fd, arrayType.Elt)
+	// }
+	// // typeInfo, ok := g.Inspector.Types[fieldType]
+
+	if astIdent, ok := fieldType.(*ast.Ident); ok {
+		for k, def := range g.Pass.TypesInfo.Defs {
+			if astIdent == k {
+				return g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, def.Type())
+			}
+		}
+	}
+
+	return fmt.Errorf("no type info for %T %v (name=%q)", fieldType, fieldType, fd.GetName())
 }
 
-func (g *Generator) populateProtoFieldDescriptorType(fd *descriptorpb.FieldDescriptorProto, typeInfo types.Type) error {
+func (g *Generator) populateProtoFieldDescriptorWithTypeInfo(msg *descriptorpb.DescriptorProto, fd *descriptorpb.FieldDescriptorProto, typeInfo types.Type) error {
 	typeName := ""
 	switch typeInfo := typeInfo.(type) {
 	case *types.Named:
-		fd.Type = descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum()
-		typeName = typeInfo.String()
+		switch underlying := typeInfo.Underlying().(type) {
+		case *types.Struct:
+			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum()
+			typeName = typeInfo.String()
+		case *types.Basic:
+			return g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, underlying)
+		case *types.Map:
+			return g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, underlying)
+		default:
+			return fmt.Errorf("unhandled named type underlying %T", underlying)
+		}
 	case *types.Basic:
 		switch typeInfo.Kind() {
 		case types.Bool:
@@ -292,11 +471,11 @@ func (g *Generator) populateProtoFieldDescriptorType(fd *descriptorpb.FieldDescr
 		case types.String:
 			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_STRING.Enum()
 		default:
-			return fmt.Errorf("unhandled basic kind %v", typeInfo.String())
+			return fmt.Errorf("unhandled basic kind %v in %v", typeInfo.String(), fd.GetName())
 		}
 	case *types.Pointer:
 		fd.Proto3Optional = PtrTo(true)
-		if err := g.populateProtoFieldDescriptorType(fd, typeInfo.Elem()); err != nil {
+		if err := g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, typeInfo.Elem()); err != nil {
 			return err
 		}
 		return nil
@@ -308,26 +487,17 @@ func (g *Generator) populateProtoFieldDescriptorType(fd *descriptorpb.FieldDescr
 			return nil
 		default:
 			fd.Label = descriptorpb.FieldDescriptorProto_LABEL_REPEATED.Enum()
-			if err := g.populateProtoFieldDescriptorType(fd, typeInfo.Elem()); err != nil {
+			if err := g.populateProtoFieldDescriptorWithTypeInfo(msg, fd, typeInfo.Elem()); err != nil {
 				return err
 			}
 			return nil
 		}
 
 	case *types.Map:
-		s := typeInfo.String()
-		switch s {
-		case "map[string]string":
-			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum()
-			typeName = "map<string, string>"
-
-		case "map[string][]byte":
-			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum()
-			typeName = "map<string, bytes>"
-
-		default:
-			return fmt.Errorf("unsupported map type %q", s)
+		if err := g.populateMap(msg, fd, typeInfo); err != nil {
+			return err
 		}
+		return nil
 
 	default:
 		return fmt.Errorf("unhandled typeInfo.Type %T", typeInfo)
@@ -336,6 +506,44 @@ func (g *Generator) populateProtoFieldDescriptorType(fd *descriptorpb.FieldDescr
 		fd.TypeName = &typeName
 	}
 
+	return nil
+}
+
+func (g *Generator) populateMap(msg *descriptorpb.DescriptorProto, fd *descriptorpb.FieldDescriptorProto, mapType *types.Map) error {
+	nestedTypeName := fd.GetName() + "Entry"
+
+	nestedType := &descriptorpb.DescriptorProto{}
+	nestedType.Name = &nestedTypeName
+	nestedType.Options = &descriptorpb.MessageOptions{
+		MapEntry: PtrTo(true),
+	}
+	keyField := &descriptorpb.FieldDescriptorProto{
+		Name:     PtrTo("key"),
+		JsonName: PtrTo("key"),
+		Number:   PtrTo(int32(1)),
+		Label:    descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+	}
+	nestedType.Field = append(nestedType.Field, keyField)
+
+	valueField := &descriptorpb.FieldDescriptorProto{
+		Name:     PtrTo("value"),
+		JsonName: PtrTo("value"),
+		Number:   PtrTo(int32(2)),
+		Label:    descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+	}
+	nestedType.Field = append(nestedType.Field, valueField)
+
+	msg.NestedType = append(msg.NestedType, nestedType)
+	fd.Type = descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum()
+	fd.Label = descriptorpb.FieldDescriptorProto_LABEL_REPEATED.Enum()
+	fd.TypeName = nestedType.Name
+
+	if err := g.populateProtoFieldDescriptorWithTypeInfo(nestedType, keyField, mapType.Key()); err != nil {
+		return err
+	}
+	if err := g.populateProtoFieldDescriptorWithTypeInfo(nestedType, valueField, mapType.Elem()); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -367,7 +575,13 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 			if len(tokens) != 1 {
 				return fmt.Errorf("unhandled json tag %q", tag)
 			}
-			klog.V(4).Infof("ignoring json tag %v, omitempty=%v, inline=%v", tag, omitEmpty, inline)
+			if omitEmpty {
+				klog.V(2).Infof("ignoring omitempty for %v", formatProto(fd))
+			}
+			if inline {
+				klog.Warningf("ignoring inline for %v", formatProto(fd))
+			}
+			fd.JsonName = &tokens[0]
 		} else if strings.HasPrefix(tag, "protobuf:\"") {
 			if !strings.HasSuffix(tag, "\"") {
 				return fmt.Errorf("unimplemented tag %+v", tag)
@@ -463,6 +677,15 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 			return fmt.Errorf("unimplemented tag %+v", tag)
 		}
 	}
+
+	// Remove default json name
+	if fd.JsonName != nil {
+		jsonName := fd.GetJsonName()
+		if jsonName == fd.GetName() {
+			fd.JsonName = nil
+		}
+	}
+
 	return nil
 }
 
@@ -476,4 +699,11 @@ func ValueOf[T any](v *T) T {
 	}
 	var def T
 	return def
+}
+
+func isExported(s string) bool {
+	for _, r := range s {
+		return unicode.IsUpper(r)
+	}
+	return false
 }
