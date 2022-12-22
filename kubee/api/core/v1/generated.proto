@@ -2,11 +2,12 @@ syntax = "proto3";
 
 package k8s.io.api.core.v1;
 
-option go_package = "k8s.io/api/core/v1";
+option go_package = "justinsb.com/kubee/api/core/v1";
 
-import "k8s.io/apimachinery/pkg/api/resource/generated.proto";
-import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
-import "k8s.io/apimachinery/pkg/util/intstr/generated.proto";
+import "apimachinery/pkg/api/resource/generated.proto";
+import "apimachinery/pkg/apis/meta/v1/custom.proto";
+import "apimachinery/pkg/apis/meta/v1/generated.proto";
+import "apimachinery/pkg/util/intstr/generated.proto";
 
 message Volume {
   optional string name = 1;
@@ -284,7 +285,7 @@ message GitRepoVolumeSource {
 message SecretVolumeSource {
   optional string secretName = 1;
   repeated KeyToPath items = 2;
-  optional bytes defaultMode = 3;
+  optional int32 defaultMode = 3;
   optional bool optional = 4;
 }
 
@@ -575,7 +576,7 @@ message TCPSocketAction {
 }
 
 message GRPCAction {
-  optional bytes port = 1;
+  optional int32 port = 1;
   optional string service = 2;
 }
 
@@ -804,7 +805,7 @@ message PodSpec {
   repeated Toleration tolerations = 22;
   repeated HostAlias hostAliases = 23;
   optional string priorityClassName = 24;
-  optional bytes priority = 25;
+  optional int32 priority = 25;
   optional PodDNSConfig dnsConfig = 26;
   repeated PodReadinessGate readinessGates = 28;
   optional string runtimeClassName = 29;
@@ -814,7 +815,7 @@ message PodSpec {
   repeated TopologySpreadConstraint topologySpreadConstraints = 33;
   optional bool setHostnameAsFQDN = 35;
   optional PodOS os = 36;
-  optional bytes hostUsers = 37;
+  optional bool hostUsers = 37;
   repeated PodSchedulingGate schedulingGates = 38;
   repeated PodResourceClaim resourceClaims = 39;
 }
@@ -1024,12 +1025,12 @@ message ServiceSpec {
   repeated string loadBalancerSourceRanges = 9;
   optional string externalName = 10;
   optional string externalTrafficPolicy = 11;
-  optional bytes healthCheckNodePort = 12;
+  optional int32 healthCheckNodePort = 12;
   optional bool publishNotReadyAddresses = 13;
   optional SessionAffinityConfig sessionAffinityConfig = 14;
   repeated string ipFamilies = 19;
   optional string ipFamilyPolicy = 17;
-  optional bytes allocateLoadBalancerNodePorts = 20;
+  optional bool allocateLoadBalancerNodePorts = 20;
   optional string loadBalancerClass = 21;
   optional string internalTrafficPolicy = 22;
 }
@@ -1464,7 +1465,7 @@ message WindowsSecurityContextOptions {
   optional string gmsaCredentialSpecName = 1;
   optional string gmsaCredentialSpec = 2;
   optional string runAsUserName = 3;
-  optional bytes hostProcess = 4;
+  optional bool hostProcess = 4;
 }
 
 message RangeAllocation {

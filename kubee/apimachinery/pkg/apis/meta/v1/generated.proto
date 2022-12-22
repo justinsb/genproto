@@ -2,9 +2,10 @@ syntax = "proto3";
 
 package k8s.io.apimachinery.pkg.apis.meta.v1;
 
-option go_package = "k8s.io/apimachinery/pkg/apis/meta/v1";
+option go_package = "justinsb.com/kubee/apimachinery/pkg/apis/meta/v1";
 
-import "k8s.io/apimachinery/pkg/runtime/generated.proto";
+import "apimachinery/pkg/apis/meta/v1/custom.proto";
+import "apimachinery/pkg/runtime/generated.proto";
 
 message Duration {
 }
@@ -37,9 +38,6 @@ message GroupVersion {
 }
 
 message MicroTime {
-}
-
-message Time {
 }
 
 message Timestamp {

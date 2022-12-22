@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package k8s.io.apimachinery.pkg.util.intstr;
+
+option go_package = "justinsb.com/kubee/apimachinery/pkg/util/intstr";
+
+
+message IntOrString {
+  optional int64 type = 1;
+  optional int32 intVal = 2;
+  optional string strVal = 3;
+}

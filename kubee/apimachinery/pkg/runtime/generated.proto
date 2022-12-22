@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package k8s.io.apimachinery.pkg.runtime;
 
-option go_package = "k8s.io/apimachinery/pkg/runtime";
+option go_package = "justinsb.com/kubee/apimachinery/pkg/runtime";
 
 
 message RawExtension {

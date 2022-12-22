@@ -96,7 +96,7 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 
 	if len(packageState.messages) != 0 {
 		pkgPath := pass.Pkg.Path()
-		p := filepath.Join("generated", pkgPath, "generated.proto")
+		p := filepath.Join("kubee", strings.TrimPrefix(pkgPath, "k8s.io"), "generated.proto")
 
 		var b bytes.Buffer
 
@@ -107,6 +107,7 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 		packageName := g.protoNameForPackage(pass.Pkg)
 
 		goPackageName := pass.Pkg.Path()
+		goPackageName = strings.Replace(goPackageName, "k8s.io", "justinsb.com/kubee", 1)
 
 		out.WriteHeader(packageName, goPackageName)
 
@@ -116,12 +117,23 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 				if imported == pass.Pkg.Path() {
 					continue
 				}
-				imports = append(imports, imported)
+				imported = strings.Replace(imported, "k8s.io/", "", 1)
+
+				imports = append(imports, imported+"/generated.proto")
+			}
+			if goPackageName == "justinsb.com/kubee/apimachinery/pkg/apis/meta/v1" {
+				imports = append(imports, "apimachinery/pkg/apis/meta/v1/custom.proto")
+			}
+			// We need to explicitly import custom protos (?)
+			for _, imported := range imports {
+				if imported == "apimachinery/pkg/apis/meta/v1/generated.proto" {
+					imports = append(imports, "apimachinery/pkg/apis/meta/v1/custom.proto")
+				}
 			}
 			sort.Strings(imports)
 
 			for _, imported := range imports {
-				out.WriteImport(imported + "/generated.proto")
+				out.WriteImport(imported)
 			}
 		}
 
@@ -390,6 +402,9 @@ func (g *Generator) visitTypeSpec(spec *ast.TypeSpec) error {
 	switch spec.Name.String() {
 	case "Table", "TableRow", "TableRowCondition", "TableColumnDefinition":
 		klog.Warningf("TODO: Should handle protobuf=false comment, hard-coding type %q", spec.Name.String())
+		generateProto = false
+	case "Time":
+		klog.Warningf("TODO: Should handle protobuf.as comment, hard-coding type %q", spec.Name.String())
 		generateProto = false
 	case "IntOrString", "RawExtension":
 		klog.Warningf("TODO: Should handle protobuf=true comment, hard-coding type %q", spec.Name.String())
@@ -764,12 +779,12 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 						case descriptorpb.FieldDescriptorProto_TYPE_STRING:
 							// ok
 						case descriptorpb.FieldDescriptorProto_TYPE_INT32:
-							klog.Warningf("changing type of int32 field to bytes: %v", formatProto(fd))
-							fd.Type = descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum()
+							klog.Warningf("not changing type of int32 field to bytes: %v", formatProto(fd))
+							// fd.Type = descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum()
 
 						case descriptorpb.FieldDescriptorProto_TYPE_BOOL:
-							klog.Warningf("changing type of bool field to bytes: %v", formatProto(fd))
-							fd.Type = descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum()
+							klog.Warningf("not changing type of bool field to bytes: %v", formatProto(fd))
+							//fd.Type = descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum()
 
 						default:
 							klog.Warningf("TODO: How do we specify bytes encoding for %v?", formatProto(fd))
