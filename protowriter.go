@@ -77,14 +77,14 @@ func (w *ProtoWriter) WriteMessage(m *descriptorpb.DescriptorProto) {
 	w.format("}\n")
 }
 
-func (w *ProtoWriter) writeField(msg *descriptorpb.DescriptorProto, m *descriptorpb.FieldDescriptorProto) {
+func (w *ProtoWriter) writeField(msg *descriptorpb.DescriptorProto, fd *descriptorpb.FieldDescriptorProto) {
 	// Check for map
-	if m.GetType() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
-		typeName := m.GetTypeName()
+	if fd.GetType() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
+		typeName := fd.GetTypeName()
 		for _, nestedType := range msg.NestedType {
 			if nestedType.GetName() == typeName {
 				if nestedType.GetOptions().GetMapEntry() {
-					w.writeMapField(msg, m, nestedType)
+					w.writeMapField(msg, fd, nestedType)
 					return
 				}
 			}
@@ -92,7 +92,7 @@ func (w *ProtoWriter) writeField(msg *descriptorpb.DescriptorProto, m *descripto
 	}
 
 	w.format("  ")
-	switch m.GetLabel() {
+	switch fd.GetLabel() {
 	case descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL:
 		w.format("optional ")
 	case descriptorpb.FieldDescriptorProto_LABEL_REQUIRED:
@@ -100,12 +100,12 @@ func (w *ProtoWriter) writeField(msg *descriptorpb.DescriptorProto, m *descripto
 	case descriptorpb.FieldDescriptorProto_LABEL_REPEATED:
 		w.format("repeated ")
 	default:
-		w.error(fmt.Errorf("unexpected label %v", m.GetLabel()))
+		w.error(fmt.Errorf("unexpected label %v", fd.GetLabel()))
 	}
-	w.writeType(m)
-	w.format(" %s = %d", m.GetName(), m.GetNumber())
-	if m.JsonName != nil {
-		w.format(" [json_name = %q]", m.GetJsonName())
+	w.writeType(fd)
+	w.format(" %s = %d", fd.GetName(), fd.GetNumber())
+	if fd.JsonName != nil {
+		w.format(" [json_name = %q]", fd.GetJsonName())
 	}
 	w.format(";\n")
 }

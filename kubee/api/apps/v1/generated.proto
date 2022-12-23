@@ -11,6 +11,7 @@ import "apimachinery/pkg/runtime/generated.proto";
 import "apimachinery/pkg/util/intstr/generated.proto";
 
 message StatefulSet {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
   optional StatefulSetSpec spec = 2;
   optional StatefulSetStatus status = 3;
 }
@@ -70,10 +71,12 @@ message StatefulSetCondition {
 }
 
 message StatefulSetList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
   repeated StatefulSet items = 2;
 }
 
 message Deployment {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
   optional DeploymentSpec spec = 2;
   optional DeploymentStatus status = 3;
 }
@@ -120,6 +123,7 @@ message DeploymentCondition {
 }
 
 message DeploymentList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
   repeated Deployment items = 2;
 }
 
@@ -163,20 +167,24 @@ message DaemonSetCondition {
 }
 
 message DaemonSet {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
   optional DaemonSetSpec spec = 2;
   optional DaemonSetStatus status = 3;
 }
 
 message DaemonSetList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
   repeated DaemonSet items = 2;
 }
 
 message ReplicaSet {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
   optional ReplicaSetSpec spec = 2;
   optional ReplicaSetStatus status = 3;
 }
 
 message ReplicaSetList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
   repeated ReplicaSet items = 2;
 }
 
@@ -205,10 +213,12 @@ message ReplicaSetCondition {
 }
 
 message ControllerRevision {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
   optional k8s.io.apimachinery.pkg.runtime.RawExtension data = 2;
   optional int64 revision = 3;
 }
 
 message ControllerRevisionList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
   repeated ControllerRevision items = 2;
 }

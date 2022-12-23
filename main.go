@@ -496,13 +496,22 @@ func (g *Generator) visitStructType(name string, spec *ast.StructType) error {
 	for _, field := range spec.Fields.List {
 		name := ""
 		if len(field.Names) == 0 {
-			// TODO
-		}
-		if len(field.Names) > 1 {
+			// Anonymous field
+			switch t := field.Type.(type) {
+			case *ast.SelectorExpr:
+				name = t.Sel.String()
+			case *ast.Ident:
+				name = t.String()
+
+			default:
+				return fmt.Errorf("unhandled type for anonymous field %T", t)
+			}
+		} else if len(field.Names) > 1 {
 			return fmt.Errorf("unexpected field with multiple names %v", field.Names)
-		}
-		for _, n := range field.Names {
-			name = name + n.Name
+		} else {
+			for _, n := range field.Names {
+				name = name + n.Name
+			}
 		}
 
 		if !isExported(name) {
@@ -770,6 +779,9 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 			for i, token := range tokens {
 				if i == 0 {
 					switch token {
+					case "-":
+						fd.Number = PtrTo(int32(0)) // will be ignored
+						return nil
 					case "bytes":
 						switch fd.GetType() {
 						case descriptorpb.FieldDescriptorProto_TYPE_MESSAGE:

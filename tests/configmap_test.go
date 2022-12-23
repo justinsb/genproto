@@ -9,8 +9,9 @@ import (
 	"strings"
 	"testing"
 
+	kubeeeappsv1 "justinsb.com/kubee/api/apps/v1"
 	kubeeecorev1 "justinsb.com/kubee/api/core/v1"
-	corev1 "k8s.io/api/core/v1"
+	appsv1 "k8s.io/api/apps/v1"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gogo/protobuf/proto"
@@ -26,7 +27,8 @@ import (
 )
 
 var groups = []runtime.SchemeBuilder{
-	corev1.SchemeBuilder,
+	appsv1.SchemeBuilder,
+	// corev1.SchemeBuilder,
 }
 
 func TestConfigMap(t *testing.T) {
@@ -48,7 +50,7 @@ func TestConfigMap(t *testing.T) {
 			name = "core"
 		}
 		name += "." + gvk.Version + "." + gvk.Kind
-		if name == "core.v1.WatchEvent" {
+		if gvk.Kind == "WatchEvent" {
 			// Does not round trip?
 			continue
 		}
@@ -149,6 +151,8 @@ func testRoundTrip(t *testing.T, codec runtime.Codec, object runtime.Object) {
 		kubee = &kubeeecorev1.Pod{}
 	case "Secret":
 		kubee = &kubeeecorev1.Secret{}
+	case "Deployment":
+		kubee = &kubeeeappsv1.Deployment{}
 	}
 
 	if kubee != nil {

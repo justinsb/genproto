@@ -8,6 +8,7 @@ import "apimachinery/pkg/apis/meta/v1/custom.proto";
 import "apimachinery/pkg/runtime/generated.proto";
 
 message Duration {
+  optional int64 duration = 1;
 }
 
 message GroupResource {
@@ -139,6 +140,7 @@ message Preconditions {
 }
 
 message Status {
+  optional ListMeta metadata = 1;
   optional string status = 2;
   optional string message = 3;
   optional string reason = 4;
@@ -162,6 +164,7 @@ message StatusCause {
 }
 
 message List {
+  optional ListMeta metadata = 1;
   repeated k8s.io.apimachinery.pkg.runtime.RawExtension items = 2;
 }
 
@@ -246,9 +249,11 @@ message TableOptions {
 }
 
 message PartialObjectMetadata {
+  optional ObjectMeta metadata = 1;
 }
 
 message PartialObjectMetadataList {
+  optional ListMeta metadata = 1;
   repeated PartialObjectMetadata items = 2;
 }
 
