@@ -47,33 +47,33 @@ message Timestamp {
 }
 
 message TypeMeta {
-  optional string kind = 1;
-  optional string apiVersion = 2;
+  optional string kind = 1 [json_name = "kind,omitempty"];
+  optional string apiVersion = 2 [json_name = "apiVersion,omitempty"];
 }
 
 message ListMeta {
-  optional string selfLink = 1;
-  optional string resourceVersion = 2;
-  optional string continue = 3;
-  optional int64 remainingItemCount = 4;
+  optional string selfLink = 1 [json_name = "selfLink,omitempty"];
+  optional string resourceVersion = 2 [json_name = "resourceVersion,omitempty"];
+  optional string continue = 3 [json_name = "continue,omitempty"];
+  optional int64 remainingItemCount = 4 [json_name = "remainingItemCount,omitempty"];
 }
 
 message ObjectMeta {
-  optional string name = 1;
-  optional string generateName = 2;
-  optional string namespace = 3;
-  optional string selfLink = 4;
-  optional string uid = 5;
-  optional string resourceVersion = 6;
-  optional int64 generation = 7;
-  optional Time creationTimestamp = 8;
-  optional Time deletionTimestamp = 9;
-  optional int64 deletionGracePeriodSeconds = 10;
-  map<string, string> labels = 11;
-  map<string, string> annotations = 12;
-  repeated OwnerReference ownerReferences = 13;
-  repeated string finalizers = 14;
-  repeated ManagedFieldsEntry managedFields = 17;
+  optional string name = 1 [json_name = "name,omitempty"];
+  optional string generateName = 2 [json_name = "generateName,omitempty"];
+  optional string namespace = 3 [json_name = "namespace,omitempty"];
+  optional string selfLink = 4 [json_name = "selfLink,omitempty"];
+  optional string uid = 5 [json_name = "uid,omitempty"];
+  optional string resourceVersion = 6 [json_name = "resourceVersion,omitempty"];
+  optional int64 generation = 7 [json_name = "generation,omitempty"];
+  optional Time creationTimestamp = 8 [json_name = "creationTimestamp,omitempty"];
+  optional Time deletionTimestamp = 9 [json_name = "deletionTimestamp,omitempty"];
+  optional int64 deletionGracePeriodSeconds = 10 [json_name = "deletionGracePeriodSeconds,omitempty"];
+  map<string, string> labels = 11 [json_name = "labels,omitempty"];
+  map<string, string> annotations = 12 [json_name = "annotations,omitempty"];
+  repeated OwnerReference ownerReferences = 13 [json_name = "ownerReferences,omitempty"];
+  repeated string finalizers = 14 [json_name = "finalizers,omitempty"];
+  repeated ManagedFieldsEntry managedFields = 17 [json_name = "managedFields,omitempty"];
 }
 
 message OwnerReference {
@@ -81,107 +81,131 @@ message OwnerReference {
   optional string kind = 1;
   optional string name = 3;
   optional string uid = 4;
-  optional bool controller = 6;
-  optional bool blockOwnerDeletion = 7;
+  optional bool controller = 6 [json_name = "controller,omitempty"];
+  optional bool blockOwnerDeletion = 7 [json_name = "blockOwnerDeletion,omitempty"];
 }
 
 message ListOptions {
-  optional string labelSelector = 1;
-  optional string fieldSelector = 2;
-  optional bool watch = 3;
-  optional bool allowWatchBookmarks = 9;
-  optional string resourceVersion = 4;
-  optional string resourceVersionMatch = 10;
-  optional int64 timeoutSeconds = 5;
-  optional int64 limit = 7;
-  optional string continue = 8;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional string labelSelector = 1 [json_name = "labelSelector,omitempty"];
+  optional string fieldSelector = 2 [json_name = "fieldSelector,omitempty"];
+  optional bool watch = 3 [json_name = "watch,omitempty"];
+  optional bool allowWatchBookmarks = 9 [json_name = "allowWatchBookmarks,omitempty"];
+  optional string resourceVersion = 4 [json_name = "resourceVersion,omitempty"];
+  optional string resourceVersionMatch = 10 [json_name = "resourceVersionMatch,omitempty"];
+  optional int64 timeoutSeconds = 5 [json_name = "timeoutSeconds,omitempty"];
+  optional int64 limit = 7 [json_name = "limit,omitempty"];
+  optional string continue = 8 [json_name = "continue,omitempty"];
 }
 
 message GetOptions {
-  optional string resourceVersion = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional string resourceVersion = 1 [json_name = "resourceVersion,omitempty"];
 }
 
 message DeleteOptions {
-  optional int64 gracePeriodSeconds = 1;
-  optional Preconditions preconditions = 2;
-  optional bool orphanDependents = 3;
-  optional string propagationPolicy = 4;
-  repeated string dryRun = 5;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional int64 gracePeriodSeconds = 1 [json_name = "gracePeriodSeconds,omitempty"];
+  optional Preconditions preconditions = 2 [json_name = "preconditions,omitempty"];
+  optional bool orphanDependents = 3 [json_name = "orphanDependents,omitempty"];
+  optional string propagationPolicy = 4 [json_name = "propagationPolicy,omitempty"];
+  repeated string dryRun = 5 [json_name = "dryRun,omitempty"];
 }
 
 message CreateOptions {
-  repeated string dryRun = 1;
-  optional string fieldManager = 3;
-  optional string fieldValidation = 4;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  repeated string dryRun = 1 [json_name = "dryRun,omitempty"];
+  optional string fieldManager = 3 [json_name = "fieldManager,omitempty"];
+  optional string fieldValidation = 4 [json_name = "fieldValidation,omitempty"];
 }
 
 message PatchOptions {
-  repeated string dryRun = 1;
-  optional bool force = 2;
-  optional string fieldManager = 3;
-  optional string fieldValidation = 4;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  repeated string dryRun = 1 [json_name = "dryRun,omitempty"];
+  optional bool force = 2 [json_name = "force,omitempty"];
+  optional string fieldManager = 3 [json_name = "fieldManager,omitempty"];
+  optional string fieldValidation = 4 [json_name = "fieldValidation,omitempty"];
 }
 
 message ApplyOptions {
-  repeated string dryRun = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  repeated string dryRun = 1 [json_name = "dryRun,omitempty"];
   optional bool force = 2;
   optional string fieldManager = 3;
 }
 
 message UpdateOptions {
-  repeated string dryRun = 1;
-  optional string fieldManager = 2;
-  optional string fieldValidation = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  repeated string dryRun = 1 [json_name = "dryRun,omitempty"];
+  optional string fieldManager = 2 [json_name = "fieldManager,omitempty"];
+  optional string fieldValidation = 3 [json_name = "fieldValidation,omitempty"];
 }
 
 message Preconditions {
-  optional string uid = 1;
-  optional string resourceVersion = 2;
+  optional string uid = 1 [json_name = "uid,omitempty"];
+  optional string resourceVersion = 2 [json_name = "resourceVersion,omitempty"];
 }
 
 message Status {
-  optional ListMeta metadata = 1;
-  optional string status = 2;
-  optional string message = 3;
-  optional string reason = 4;
-  optional StatusDetails details = 5;
-  optional int32 code = 6;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional ListMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional string status = 2 [json_name = "status,omitempty"];
+  optional string message = 3 [json_name = "message,omitempty"];
+  optional string reason = 4 [json_name = "reason,omitempty"];
+  optional StatusDetails details = 5 [json_name = "details,omitempty"];
+  optional int32 code = 6 [json_name = "code,omitempty"];
 }
 
 message StatusDetails {
-  optional string name = 1;
-  optional string group = 2;
-  optional string kind = 3;
-  optional string uid = 6;
-  repeated StatusCause causes = 4;
-  optional int32 retryAfterSeconds = 5;
+  optional string name = 1 [json_name = "name,omitempty"];
+  optional string group = 2 [json_name = "group,omitempty"];
+  optional string kind = 3 [json_name = "kind,omitempty"];
+  optional string uid = 6 [json_name = "uid,omitempty"];
+  repeated StatusCause causes = 4 [json_name = "causes,omitempty"];
+  optional int32 retryAfterSeconds = 5 [json_name = "retryAfterSeconds,omitempty"];
 }
 
 message StatusCause {
-  optional string reason = 1;
-  optional string message = 2;
-  optional string field = 3;
+  optional string reason = 1 [json_name = "reason,omitempty"];
+  optional string message = 2 [json_name = "message,omitempty"];
+  optional string field = 3 [json_name = "field,omitempty"];
 }
 
 message List {
-  optional ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated k8s.io.apimachinery.pkg.runtime.RawExtension items = 2;
 }
 
 message APIVersions {
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated string versions = 1;
   repeated ServerAddressByClientCIDR serverAddressByClientCIDRs = 2;
 }
 
 message APIGroupList {
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated APIGroup groups = 1;
 }
 
 message APIGroup {
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string name = 1;
   repeated GroupVersionForDiscovery versions = 2;
-  optional GroupVersionForDiscovery preferredVersion = 3;
-  repeated ServerAddressByClientCIDR serverAddressByClientCIDRs = 4;
+  optional GroupVersionForDiscovery preferredVersion = 3 [json_name = "preferredVersion,omitempty"];
+  repeated ServerAddressByClientCIDR serverAddressByClientCIDRs = 4 [json_name = "serverAddressByClientCIDRs,omitempty"];
 }
 
 message ServerAddressByClientCIDR {
@@ -198,16 +222,18 @@ message APIResource {
   optional string name = 1;
   optional string singularName = 6;
   optional bool namespaced = 2;
-  optional string group = 8;
-  optional string version = 9;
+  optional string group = 8 [json_name = "group,omitempty"];
+  optional string version = 9 [json_name = "version,omitempty"];
   optional string kind = 3;
   repeated string verbs = 4;
-  repeated string shortNames = 5;
-  repeated string categories = 7;
-  optional string storageVersionHash = 10;
+  repeated string shortNames = 5 [json_name = "shortNames,omitempty"];
+  repeated string categories = 7 [json_name = "categories,omitempty"];
+  optional string storageVersionHash = 10 [json_name = "storageVersionHash,omitempty"];
 }
 
 message APIResourceList {
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string groupVersion = 1;
   repeated APIResource resources = 2;
 }
@@ -220,24 +246,24 @@ message Patch {
 }
 
 message LabelSelector {
-  map<string, string> matchLabels = 1;
-  repeated LabelSelectorRequirement matchExpressions = 2;
+  map<string, string> matchLabels = 1 [json_name = "matchLabels,omitempty"];
+  repeated LabelSelectorRequirement matchExpressions = 2 [json_name = "matchExpressions,omitempty"];
 }
 
 message LabelSelectorRequirement {
   optional string key = 1;
   optional string operator = 2;
-  repeated string values = 3;
+  repeated string values = 3 [json_name = "values,omitempty"];
 }
 
 message ManagedFieldsEntry {
-  optional string manager = 1;
-  optional string operation = 2;
-  optional string apiVersion = 3;
-  optional Time time = 4;
-  optional string fieldsType = 6;
-  optional FieldsV1 fieldsV1 = 7;
-  optional string subresource = 8;
+  optional string manager = 1 [json_name = "manager,omitempty"];
+  optional string operation = 2 [json_name = "operation,omitempty"];
+  optional string apiVersion = 3 [json_name = "apiVersion,omitempty"];
+  optional Time time = 4 [json_name = "time,omitempty"];
+  optional string fieldsType = 6 [json_name = "fieldsType,omitempty"];
+  optional FieldsV1 fieldsV1 = 7 [json_name = "fieldsV1,omitempty"];
+  optional string subresource = 8 [json_name = "subresource,omitempty"];
 }
 
 message FieldsV1 {
@@ -245,22 +271,28 @@ message FieldsV1 {
 }
 
 message TableOptions {
-  optional string includeObject = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional string includeObject = 1 [json_name = "includeObject,omitempty"];
 }
 
 message PartialObjectMetadata {
-  optional ObjectMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
 }
 
 message PartialObjectMetadataList {
-  optional ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated PartialObjectMetadata items = 2;
 }
 
 message Condition {
   optional string type = 1;
   optional string status = 2;
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 3 [json_name = "observedGeneration,omitempty"];
   optional Time lastTransitionTime = 4;
   optional string reason = 5;
   optional string message = 6;

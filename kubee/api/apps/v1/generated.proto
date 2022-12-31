@@ -11,24 +11,26 @@ import "apimachinery/pkg/runtime/generated.proto";
 import "apimachinery/pkg/util/intstr/generated.proto";
 
 message StatefulSet {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional StatefulSetSpec spec = 2;
-  optional StatefulSetStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional StatefulSetSpec spec = 2 [json_name = "spec,omitempty"];
+  optional StatefulSetStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message StatefulSetUpdateStrategy {
-  optional string type = 1;
-  optional RollingUpdateStatefulSetStrategy rollingUpdate = 2;
+  optional string type = 1 [json_name = "type,omitempty"];
+  optional RollingUpdateStatefulSetStrategy rollingUpdate = 2 [json_name = "rollingUpdate,omitempty"];
 }
 
 message RollingUpdateStatefulSetStrategy {
-  optional int32 partition = 1;
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 2;
+  optional int32 partition = 1 [json_name = "partition,omitempty"];
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 2 [json_name = "maxUnavailable,omitempty"];
 }
 
 message StatefulSetPersistentVolumeClaimRetentionPolicy {
-  optional string whenDeleted = 1;
-  optional string whenScaled = 2;
+  optional string whenDeleted = 1 [json_name = "whenDeleted,omitempty"];
+  optional string whenScaled = 2 [json_name = "whenScaled,omitempty"];
 }
 
 message StatefulSetOrdinals {
@@ -36,113 +38,119 @@ message StatefulSetOrdinals {
 }
 
 message StatefulSetSpec {
-  optional int32 replicas = 1;
+  optional int32 replicas = 1 [json_name = "replicas,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
   optional k8s.io.api.core.v1.PodTemplateSpec template = 3;
-  repeated k8s.io.api.core.v1.PersistentVolumeClaim volumeClaimTemplates = 4;
+  repeated k8s.io.api.core.v1.PersistentVolumeClaim volumeClaimTemplates = 4 [json_name = "volumeClaimTemplates,omitempty"];
   optional string serviceName = 5;
-  optional string podManagementPolicy = 6;
-  optional StatefulSetUpdateStrategy updateStrategy = 7;
-  optional int32 revisionHistoryLimit = 8;
-  optional int32 minReadySeconds = 9;
-  optional StatefulSetPersistentVolumeClaimRetentionPolicy persistentVolumeClaimRetentionPolicy = 10;
-  optional StatefulSetOrdinals ordinals = 11;
+  optional string podManagementPolicy = 6 [json_name = "podManagementPolicy,omitempty"];
+  optional StatefulSetUpdateStrategy updateStrategy = 7 [json_name = "updateStrategy,omitempty"];
+  optional int32 revisionHistoryLimit = 8 [json_name = "revisionHistoryLimit,omitempty"];
+  optional int32 minReadySeconds = 9 [json_name = "minReadySeconds,omitempty"];
+  optional StatefulSetPersistentVolumeClaimRetentionPolicy persistentVolumeClaimRetentionPolicy = 10 [json_name = "persistentVolumeClaimRetentionPolicy,omitempty"];
+  optional StatefulSetOrdinals ordinals = 11 [json_name = "ordinals,omitempty"];
 }
 
 message StatefulSetStatus {
-  optional int64 observedGeneration = 1;
+  optional int64 observedGeneration = 1 [json_name = "observedGeneration,omitempty"];
   optional int32 replicas = 2;
-  optional int32 readyReplicas = 3;
-  optional int32 currentReplicas = 4;
-  optional int32 updatedReplicas = 5;
-  optional string currentRevision = 6;
-  optional string updateRevision = 7;
-  optional int32 collisionCount = 9;
-  repeated StatefulSetCondition conditions = 10;
+  optional int32 readyReplicas = 3 [json_name = "readyReplicas,omitempty"];
+  optional int32 currentReplicas = 4 [json_name = "currentReplicas,omitempty"];
+  optional int32 updatedReplicas = 5 [json_name = "updatedReplicas,omitempty"];
+  optional string currentRevision = 6 [json_name = "currentRevision,omitempty"];
+  optional string updateRevision = 7 [json_name = "updateRevision,omitempty"];
+  optional int32 collisionCount = 9 [json_name = "collisionCount,omitempty"];
+  repeated StatefulSetCondition conditions = 10 [json_name = "conditions,omitempty"];
   optional int32 availableReplicas = 11;
 }
 
 message StatefulSetCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3;
-  optional string reason = 4;
-  optional string message = 5;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 4 [json_name = "reason,omitempty"];
+  optional string message = 5 [json_name = "message,omitempty"];
 }
 
 message StatefulSetList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated StatefulSet items = 2;
 }
 
 message Deployment {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional DeploymentSpec spec = 2;
-  optional DeploymentStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional DeploymentSpec spec = 2 [json_name = "spec,omitempty"];
+  optional DeploymentStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message DeploymentSpec {
-  optional int32 replicas = 1;
+  optional int32 replicas = 1 [json_name = "replicas,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
   optional k8s.io.api.core.v1.PodTemplateSpec template = 3;
-  optional DeploymentStrategy strategy = 4;
-  optional int32 minReadySeconds = 5;
-  optional int32 revisionHistoryLimit = 6;
-  optional bool paused = 7;
-  optional int32 progressDeadlineSeconds = 9;
+  optional DeploymentStrategy strategy = 4 [json_name = "strategy,omitempty"];
+  optional int32 minReadySeconds = 5 [json_name = "minReadySeconds,omitempty"];
+  optional int32 revisionHistoryLimit = 6 [json_name = "revisionHistoryLimit,omitempty"];
+  optional bool paused = 7 [json_name = "paused,omitempty"];
+  optional int32 progressDeadlineSeconds = 9 [json_name = "progressDeadlineSeconds,omitempty"];
 }
 
 message DeploymentStrategy {
-  optional string type = 1;
-  optional RollingUpdateDeployment rollingUpdate = 2;
+  optional string type = 1 [json_name = "type,omitempty"];
+  optional RollingUpdateDeployment rollingUpdate = 2 [json_name = "rollingUpdate,omitempty"];
 }
 
 message RollingUpdateDeployment {
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 1;
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxSurge = 2;
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 1 [json_name = "maxUnavailable,omitempty"];
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxSurge = 2 [json_name = "maxSurge,omitempty"];
 }
 
 message DeploymentStatus {
-  optional int64 observedGeneration = 1;
-  optional int32 replicas = 2;
-  optional int32 updatedReplicas = 3;
-  optional int32 readyReplicas = 7;
-  optional int32 availableReplicas = 4;
-  optional int32 unavailableReplicas = 5;
-  repeated DeploymentCondition conditions = 6;
-  optional int32 collisionCount = 8;
+  optional int64 observedGeneration = 1 [json_name = "observedGeneration,omitempty"];
+  optional int32 replicas = 2 [json_name = "replicas,omitempty"];
+  optional int32 updatedReplicas = 3 [json_name = "updatedReplicas,omitempty"];
+  optional int32 readyReplicas = 7 [json_name = "readyReplicas,omitempty"];
+  optional int32 availableReplicas = 4 [json_name = "availableReplicas,omitempty"];
+  optional int32 unavailableReplicas = 5 [json_name = "unavailableReplicas,omitempty"];
+  repeated DeploymentCondition conditions = 6 [json_name = "conditions,omitempty"];
+  optional int32 collisionCount = 8 [json_name = "collisionCount,omitempty"];
 }
 
 message DeploymentCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastUpdateTime = 6;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 7;
-  optional string reason = 4;
-  optional string message = 5;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastUpdateTime = 6 [json_name = "lastUpdateTime,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 7 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 4 [json_name = "reason,omitempty"];
+  optional string message = 5 [json_name = "message,omitempty"];
 }
 
 message DeploymentList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated Deployment items = 2;
 }
 
 message DaemonSetUpdateStrategy {
-  optional string type = 1;
-  optional RollingUpdateDaemonSet rollingUpdate = 2;
+  optional string type = 1 [json_name = "type,omitempty"];
+  optional RollingUpdateDaemonSet rollingUpdate = 2 [json_name = "rollingUpdate,omitempty"];
 }
 
 message RollingUpdateDaemonSet {
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 1;
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxSurge = 2;
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 1 [json_name = "maxUnavailable,omitempty"];
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxSurge = 2 [json_name = "maxSurge,omitempty"];
 }
 
 message DaemonSetSpec {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 1;
   optional k8s.io.api.core.v1.PodTemplateSpec template = 2;
-  optional DaemonSetUpdateStrategy updateStrategy = 3;
-  optional int32 minReadySeconds = 4;
-  optional int32 revisionHistoryLimit = 6;
+  optional DaemonSetUpdateStrategy updateStrategy = 3 [json_name = "updateStrategy,omitempty"];
+  optional int32 minReadySeconds = 4 [json_name = "minReadySeconds,omitempty"];
+  optional int32 revisionHistoryLimit = 6 [json_name = "revisionHistoryLimit,omitempty"];
 }
 
 message DaemonSetStatus {
@@ -150,75 +158,87 @@ message DaemonSetStatus {
   optional int32 numberMisscheduled = 2;
   optional int32 desiredNumberScheduled = 3;
   optional int32 numberReady = 4;
-  optional int64 observedGeneration = 5;
-  optional int32 updatedNumberScheduled = 6;
-  optional int32 numberAvailable = 7;
-  optional int32 numberUnavailable = 8;
-  optional int32 collisionCount = 9;
-  repeated DaemonSetCondition conditions = 10;
+  optional int64 observedGeneration = 5 [json_name = "observedGeneration,omitempty"];
+  optional int32 updatedNumberScheduled = 6 [json_name = "updatedNumberScheduled,omitempty"];
+  optional int32 numberAvailable = 7 [json_name = "numberAvailable,omitempty"];
+  optional int32 numberUnavailable = 8 [json_name = "numberUnavailable,omitempty"];
+  optional int32 collisionCount = 9 [json_name = "collisionCount,omitempty"];
+  repeated DaemonSetCondition conditions = 10 [json_name = "conditions,omitempty"];
 }
 
 message DaemonSetCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3;
-  optional string reason = 4;
-  optional string message = 5;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 4 [json_name = "reason,omitempty"];
+  optional string message = 5 [json_name = "message,omitempty"];
 }
 
 message DaemonSet {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional DaemonSetSpec spec = 2;
-  optional DaemonSetStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional DaemonSetSpec spec = 2 [json_name = "spec,omitempty"];
+  optional DaemonSetStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message DaemonSetList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated DaemonSet items = 2;
 }
 
 message ReplicaSet {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional ReplicaSetSpec spec = 2;
-  optional ReplicaSetStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional ReplicaSetSpec spec = 2 [json_name = "spec,omitempty"];
+  optional ReplicaSetStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message ReplicaSetList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated ReplicaSet items = 2;
 }
 
 message ReplicaSetSpec {
-  optional int32 replicas = 1;
-  optional int32 minReadySeconds = 4;
+  optional int32 replicas = 1 [json_name = "replicas,omitempty"];
+  optional int32 minReadySeconds = 4 [json_name = "minReadySeconds,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
-  optional k8s.io.api.core.v1.PodTemplateSpec template = 3;
+  optional k8s.io.api.core.v1.PodTemplateSpec template = 3 [json_name = "template,omitempty"];
 }
 
 message ReplicaSetStatus {
   optional int32 replicas = 1;
-  optional int32 fullyLabeledReplicas = 2;
-  optional int32 readyReplicas = 4;
-  optional int32 availableReplicas = 5;
-  optional int64 observedGeneration = 3;
-  repeated ReplicaSetCondition conditions = 6;
+  optional int32 fullyLabeledReplicas = 2 [json_name = "fullyLabeledReplicas,omitempty"];
+  optional int32 readyReplicas = 4 [json_name = "readyReplicas,omitempty"];
+  optional int32 availableReplicas = 5 [json_name = "availableReplicas,omitempty"];
+  optional int64 observedGeneration = 3 [json_name = "observedGeneration,omitempty"];
+  repeated ReplicaSetCondition conditions = 6 [json_name = "conditions,omitempty"];
 }
 
 message ReplicaSetCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3;
-  optional string reason = 4;
-  optional string message = 5;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 4 [json_name = "reason,omitempty"];
+  optional string message = 5 [json_name = "message,omitempty"];
 }
 
 message ControllerRevision {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional k8s.io.apimachinery.pkg.runtime.RawExtension data = 2;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional k8s.io.apimachinery.pkg.runtime.RawExtension data = 2 [json_name = "data,omitempty"];
   optional int64 revision = 3;
 }
 
 message ControllerRevisionList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated ControllerRevision items = 2;
 }

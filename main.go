@@ -17,6 +17,7 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/singlechecker"
 
+	"google.golang.org/protobuf/encoding/prototext"
 	"google.golang.org/protobuf/types/descriptorpb"
 	"k8s.io/klog/v2"
 )
@@ -406,7 +407,7 @@ func (g *Generator) visitTypeSpec(spec *ast.TypeSpec) error {
 	case "Time":
 		klog.Warningf("TODO: Should handle protobuf.as comment, hard-coding type %q", spec.Name.String())
 		generateProto = false
-	case "IntOrString", "RawExtension":
+	case "IntOrString", "RawExtension", "Unknown":
 		klog.Warningf("TODO: Should handle protobuf=true comment, hard-coding type %q", spec.Name.String())
 		generateProto = true
 	}
@@ -527,8 +528,36 @@ func (g *Generator) visitStructType(name string, spec *ast.StructType) error {
 			}
 		}
 		if f.GetNumber() == 0 {
-			klog.Warningf("skipping field with no proto tag")
-			continue
+			if f.GetName() == "TypeMeta" {
+				// TODO: make this test more accurate?
+				// There is no inline tag in JSON.  Instead we emit apiVersion and kind as top-level fields.
+				klog.Warningf("replacing typemeta with apiVersion and kind")
+				{
+					fd := &descriptorpb.FieldDescriptorProto{
+						Name:           PtrTo("api_version"),
+						JsonName:       PtrTo("apiVersion,omitempty"),
+						Type:           PtrTo(descriptorpb.FieldDescriptorProto_TYPE_STRING),
+						Proto3Optional: PtrTo(true),
+						Number:         PtrTo(int32(77771)), // TODO: Pick number
+					}
+					msg.Field = append(msg.Field, fd)
+				}
+				{
+					fd := &descriptorpb.FieldDescriptorProto{
+						Name:           PtrTo("kind"),
+						JsonName:       PtrTo("kind,omitempty"),
+						Type:           PtrTo(descriptorpb.FieldDescriptorProto_TYPE_STRING),
+						Proto3Optional: PtrTo(true),
+						Number:         PtrTo(int32(77772)), // TODO: Pick number
+					}
+					msg.Field = append(msg.Field, fd)
+				}
+
+				continue
+			} else {
+				klog.Warningf("skipping field with no proto tag %v", prototext.Format(f))
+				continue
+			}
 		}
 
 		if err := g.populateProtoFieldDescriptor(msg, f, field.Type); err != nil {
@@ -762,13 +791,16 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 			if len(tokens) != 1 {
 				return fmt.Errorf("unhandled json tag %q", tag)
 			}
+			jsonName := tokens[0]
 			if omitEmpty {
 				klog.V(2).Infof("ignoring omitempty for %v", formatProto(fd))
+				jsonName += ",omitempty"
 			}
 			if inline {
 				klog.Warningf("ignoring inline for %v", formatProto(fd))
+				jsonName += ",inline"
 			}
-			fd.JsonName = &tokens[0]
+			fd.JsonName = &jsonName
 		} else if strings.HasPrefix(tag, "protobuf:\"") {
 			if !strings.HasSuffix(tag, "\"") {
 				return fmt.Errorf("unimplemented tag %+v", tag)

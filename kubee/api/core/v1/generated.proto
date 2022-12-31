@@ -11,507 +11,515 @@ import "apimachinery/pkg/util/intstr/generated.proto";
 
 message Volume {
   optional string name = 1;
-  optional VolumeSource volumeSource = 2 [json_name = ""];
+  optional VolumeSource volumeSource = 2 [json_name = ",inline"];
 }
 
 message VolumeSource {
-  optional HostPathVolumeSource hostPath = 1;
-  optional EmptyDirVolumeSource emptyDir = 2;
-  optional GCEPersistentDiskVolumeSource gcePersistentDisk = 3;
-  optional AWSElasticBlockStoreVolumeSource awsElasticBlockStore = 4;
-  optional GitRepoVolumeSource gitRepo = 5;
-  optional SecretVolumeSource secret = 6;
-  optional NFSVolumeSource nfs = 7;
-  optional ISCSIVolumeSource iscsi = 8;
-  optional GlusterfsVolumeSource glusterfs = 9;
-  optional PersistentVolumeClaimVolumeSource persistentVolumeClaim = 10;
-  optional RBDVolumeSource rbd = 11;
-  optional FlexVolumeSource flexVolume = 12;
-  optional CinderVolumeSource cinder = 13;
-  optional CephFSVolumeSource cephfs = 14;
-  optional FlockerVolumeSource flocker = 15;
-  optional DownwardAPIVolumeSource downwardAPI = 16;
-  optional FCVolumeSource fc = 17;
-  optional AzureFileVolumeSource azureFile = 18;
-  optional ConfigMapVolumeSource configMap = 19;
-  optional VsphereVirtualDiskVolumeSource vsphereVolume = 20;
-  optional QuobyteVolumeSource quobyte = 21;
-  optional AzureDiskVolumeSource azureDisk = 22;
-  optional PhotonPersistentDiskVolumeSource photonPersistentDisk = 23;
-  optional ProjectedVolumeSource projected = 26;
-  optional PortworxVolumeSource portworxVolume = 24;
-  optional ScaleIOVolumeSource scaleIO = 25;
-  optional StorageOSVolumeSource storageos = 27;
-  optional CSIVolumeSource csi = 28;
-  optional EphemeralVolumeSource ephemeral = 29;
+  optional HostPathVolumeSource hostPath = 1 [json_name = "hostPath,omitempty"];
+  optional EmptyDirVolumeSource emptyDir = 2 [json_name = "emptyDir,omitempty"];
+  optional GCEPersistentDiskVolumeSource gcePersistentDisk = 3 [json_name = "gcePersistentDisk,omitempty"];
+  optional AWSElasticBlockStoreVolumeSource awsElasticBlockStore = 4 [json_name = "awsElasticBlockStore,omitempty"];
+  optional GitRepoVolumeSource gitRepo = 5 [json_name = "gitRepo,omitempty"];
+  optional SecretVolumeSource secret = 6 [json_name = "secret,omitempty"];
+  optional NFSVolumeSource nfs = 7 [json_name = "nfs,omitempty"];
+  optional ISCSIVolumeSource iscsi = 8 [json_name = "iscsi,omitempty"];
+  optional GlusterfsVolumeSource glusterfs = 9 [json_name = "glusterfs,omitempty"];
+  optional PersistentVolumeClaimVolumeSource persistentVolumeClaim = 10 [json_name = "persistentVolumeClaim,omitempty"];
+  optional RBDVolumeSource rbd = 11 [json_name = "rbd,omitempty"];
+  optional FlexVolumeSource flexVolume = 12 [json_name = "flexVolume,omitempty"];
+  optional CinderVolumeSource cinder = 13 [json_name = "cinder,omitempty"];
+  optional CephFSVolumeSource cephfs = 14 [json_name = "cephfs,omitempty"];
+  optional FlockerVolumeSource flocker = 15 [json_name = "flocker,omitempty"];
+  optional DownwardAPIVolumeSource downwardAPI = 16 [json_name = "downwardAPI,omitempty"];
+  optional FCVolumeSource fc = 17 [json_name = "fc,omitempty"];
+  optional AzureFileVolumeSource azureFile = 18 [json_name = "azureFile,omitempty"];
+  optional ConfigMapVolumeSource configMap = 19 [json_name = "configMap,omitempty"];
+  optional VsphereVirtualDiskVolumeSource vsphereVolume = 20 [json_name = "vsphereVolume,omitempty"];
+  optional QuobyteVolumeSource quobyte = 21 [json_name = "quobyte,omitempty"];
+  optional AzureDiskVolumeSource azureDisk = 22 [json_name = "azureDisk,omitempty"];
+  optional PhotonPersistentDiskVolumeSource photonPersistentDisk = 23 [json_name = "photonPersistentDisk,omitempty"];
+  optional ProjectedVolumeSource projected = 26 [json_name = "projected,omitempty"];
+  optional PortworxVolumeSource portworxVolume = 24 [json_name = "portworxVolume,omitempty"];
+  optional ScaleIOVolumeSource scaleIO = 25 [json_name = "scaleIO,omitempty"];
+  optional StorageOSVolumeSource storageos = 27 [json_name = "storageos,omitempty"];
+  optional CSIVolumeSource csi = 28 [json_name = "csi,omitempty"];
+  optional EphemeralVolumeSource ephemeral = 29 [json_name = "ephemeral,omitempty"];
 }
 
 message PersistentVolumeClaimVolumeSource {
   optional string claimName = 1;
-  optional bool readOnly = 2;
+  optional bool readOnly = 2 [json_name = "readOnly,omitempty"];
 }
 
 message PersistentVolumeSource {
-  optional GCEPersistentDiskVolumeSource gcePersistentDisk = 1;
-  optional AWSElasticBlockStoreVolumeSource awsElasticBlockStore = 2;
-  optional HostPathVolumeSource hostPath = 3;
-  optional GlusterfsPersistentVolumeSource glusterfs = 4;
-  optional NFSVolumeSource nfs = 5;
-  optional RBDPersistentVolumeSource rbd = 6;
-  optional ISCSIPersistentVolumeSource iscsi = 7;
-  optional CinderPersistentVolumeSource cinder = 8;
-  optional CephFSPersistentVolumeSource cephfs = 9;
-  optional FCVolumeSource fc = 10;
-  optional FlockerVolumeSource flocker = 11;
-  optional FlexPersistentVolumeSource flexVolume = 12;
-  optional AzureFilePersistentVolumeSource azureFile = 13;
-  optional VsphereVirtualDiskVolumeSource vsphereVolume = 14;
-  optional QuobyteVolumeSource quobyte = 15;
-  optional AzureDiskVolumeSource azureDisk = 16;
-  optional PhotonPersistentDiskVolumeSource photonPersistentDisk = 17;
-  optional PortworxVolumeSource portworxVolume = 18;
-  optional ScaleIOPersistentVolumeSource scaleIO = 19;
-  optional LocalVolumeSource local = 20;
-  optional StorageOSPersistentVolumeSource storageos = 21;
-  optional CSIPersistentVolumeSource csi = 22;
+  optional GCEPersistentDiskVolumeSource gcePersistentDisk = 1 [json_name = "gcePersistentDisk,omitempty"];
+  optional AWSElasticBlockStoreVolumeSource awsElasticBlockStore = 2 [json_name = "awsElasticBlockStore,omitempty"];
+  optional HostPathVolumeSource hostPath = 3 [json_name = "hostPath,omitempty"];
+  optional GlusterfsPersistentVolumeSource glusterfs = 4 [json_name = "glusterfs,omitempty"];
+  optional NFSVolumeSource nfs = 5 [json_name = "nfs,omitempty"];
+  optional RBDPersistentVolumeSource rbd = 6 [json_name = "rbd,omitempty"];
+  optional ISCSIPersistentVolumeSource iscsi = 7 [json_name = "iscsi,omitempty"];
+  optional CinderPersistentVolumeSource cinder = 8 [json_name = "cinder,omitempty"];
+  optional CephFSPersistentVolumeSource cephfs = 9 [json_name = "cephfs,omitempty"];
+  optional FCVolumeSource fc = 10 [json_name = "fc,omitempty"];
+  optional FlockerVolumeSource flocker = 11 [json_name = "flocker,omitempty"];
+  optional FlexPersistentVolumeSource flexVolume = 12 [json_name = "flexVolume,omitempty"];
+  optional AzureFilePersistentVolumeSource azureFile = 13 [json_name = "azureFile,omitempty"];
+  optional VsphereVirtualDiskVolumeSource vsphereVolume = 14 [json_name = "vsphereVolume,omitempty"];
+  optional QuobyteVolumeSource quobyte = 15 [json_name = "quobyte,omitempty"];
+  optional AzureDiskVolumeSource azureDisk = 16 [json_name = "azureDisk,omitempty"];
+  optional PhotonPersistentDiskVolumeSource photonPersistentDisk = 17 [json_name = "photonPersistentDisk,omitempty"];
+  optional PortworxVolumeSource portworxVolume = 18 [json_name = "portworxVolume,omitempty"];
+  optional ScaleIOPersistentVolumeSource scaleIO = 19 [json_name = "scaleIO,omitempty"];
+  optional LocalVolumeSource local = 20 [json_name = "local,omitempty"];
+  optional StorageOSPersistentVolumeSource storageos = 21 [json_name = "storageos,omitempty"];
+  optional CSIPersistentVolumeSource csi = 22 [json_name = "csi,omitempty"];
 }
 
 message PersistentVolume {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional PersistentVolumeSpec spec = 2;
-  optional PersistentVolumeStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional PersistentVolumeSpec spec = 2 [json_name = "spec,omitempty"];
+  optional PersistentVolumeStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message PersistentVolumeSpec {
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> capacity = 1;
-  optional PersistentVolumeSource persistentVolumeSource = 2 [json_name = ""];
-  repeated string accessModes = 3;
-  optional ObjectReference claimRef = 4;
-  optional string persistentVolumeReclaimPolicy = 5;
-  optional string storageClassName = 6;
-  repeated string mountOptions = 7;
-  optional string volumeMode = 8;
-  optional VolumeNodeAffinity nodeAffinity = 9;
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> capacity = 1 [json_name = "capacity,omitempty"];
+  optional PersistentVolumeSource persistentVolumeSource = 2 [json_name = ",inline"];
+  repeated string accessModes = 3 [json_name = "accessModes,omitempty"];
+  optional ObjectReference claimRef = 4 [json_name = "claimRef,omitempty"];
+  optional string persistentVolumeReclaimPolicy = 5 [json_name = "persistentVolumeReclaimPolicy,omitempty"];
+  optional string storageClassName = 6 [json_name = "storageClassName,omitempty"];
+  repeated string mountOptions = 7 [json_name = "mountOptions,omitempty"];
+  optional string volumeMode = 8 [json_name = "volumeMode,omitempty"];
+  optional VolumeNodeAffinity nodeAffinity = 9 [json_name = "nodeAffinity,omitempty"];
 }
 
 message VolumeNodeAffinity {
-  optional NodeSelector required = 1;
+  optional NodeSelector required = 1 [json_name = "required,omitempty"];
 }
 
 message PersistentVolumeStatus {
-  optional string phase = 1;
-  optional string message = 2;
-  optional string reason = 3;
+  optional string phase = 1 [json_name = "phase,omitempty"];
+  optional string message = 2 [json_name = "message,omitempty"];
+  optional string reason = 3 [json_name = "reason,omitempty"];
 }
 
 message PersistentVolumeList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated PersistentVolume items = 2;
 }
 
 message PersistentVolumeClaim {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional PersistentVolumeClaimSpec spec = 2;
-  optional PersistentVolumeClaimStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional PersistentVolumeClaimSpec spec = 2 [json_name = "spec,omitempty"];
+  optional PersistentVolumeClaimStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message PersistentVolumeClaimList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated PersistentVolumeClaim items = 2;
 }
 
 message PersistentVolumeClaimSpec {
-  repeated string accessModes = 1;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 4;
-  optional ResourceRequirements resources = 2;
-  optional string volumeName = 3;
-  optional string storageClassName = 5;
-  optional string volumeMode = 6;
-  optional TypedLocalObjectReference dataSource = 7;
-  optional TypedObjectReference dataSourceRef = 8;
+  repeated string accessModes = 1 [json_name = "accessModes,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 4 [json_name = "selector,omitempty"];
+  optional ResourceRequirements resources = 2 [json_name = "resources,omitempty"];
+  optional string volumeName = 3 [json_name = "volumeName,omitempty"];
+  optional string storageClassName = 5 [json_name = "storageClassName,omitempty"];
+  optional string volumeMode = 6 [json_name = "volumeMode,omitempty"];
+  optional TypedLocalObjectReference dataSource = 7 [json_name = "dataSource,omitempty"];
+  optional TypedObjectReference dataSourceRef = 8 [json_name = "dataSourceRef,omitempty"];
 }
 
 message TypedObjectReference {
   optional string apiGroup = 1;
   optional string kind = 2;
   optional string name = 3;
-  optional string namespace = 4;
+  optional string namespace = 4 [json_name = "namespace,omitempty"];
 }
 
 message PersistentVolumeClaimCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastProbeTime = 3;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4;
-  optional string reason = 5;
-  optional string message = 6;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastProbeTime = 3 [json_name = "lastProbeTime,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 5 [json_name = "reason,omitempty"];
+  optional string message = 6 [json_name = "message,omitempty"];
 }
 
 message PersistentVolumeClaimStatus {
-  optional string phase = 1;
-  repeated string accessModes = 2;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> capacity = 3;
-  repeated PersistentVolumeClaimCondition conditions = 4;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> allocatedResources = 5;
-  optional string resizeStatus = 6;
+  optional string phase = 1 [json_name = "phase,omitempty"];
+  repeated string accessModes = 2 [json_name = "accessModes,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> capacity = 3 [json_name = "capacity,omitempty"];
+  repeated PersistentVolumeClaimCondition conditions = 4 [json_name = "conditions,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> allocatedResources = 5 [json_name = "allocatedResources,omitempty"];
+  optional string resizeStatus = 6 [json_name = "resizeStatus,omitempty"];
 }
 
 message HostPathVolumeSource {
   optional string path = 1;
-  optional string type = 2;
+  optional string type = 2 [json_name = "type,omitempty"];
 }
 
 message EmptyDirVolumeSource {
-  optional string medium = 1;
-  optional k8s.io.apimachinery.pkg.api.resource.Quantity sizeLimit = 2;
+  optional string medium = 1 [json_name = "medium,omitempty"];
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity sizeLimit = 2 [json_name = "sizeLimit,omitempty"];
 }
 
 message GlusterfsVolumeSource {
   optional string endpoints = 1;
   optional string path = 2;
-  optional bool readOnly = 3;
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
 }
 
 message GlusterfsPersistentVolumeSource {
   optional string endpoints = 1;
   optional string path = 2;
-  optional bool readOnly = 3;
-  optional string endpointsNamespace = 4;
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
+  optional string endpointsNamespace = 4 [json_name = "endpointsNamespace,omitempty"];
 }
 
 message RBDVolumeSource {
   repeated string monitors = 1;
   optional string image = 2;
-  optional string fsType = 3;
-  optional string pool = 4;
-  optional string user = 5;
-  optional string keyring = 6;
-  optional LocalObjectReference secretRef = 7;
-  optional bool readOnly = 8;
+  optional string fsType = 3 [json_name = "fsType,omitempty"];
+  optional string pool = 4 [json_name = "pool,omitempty"];
+  optional string user = 5 [json_name = "user,omitempty"];
+  optional string keyring = 6 [json_name = "keyring,omitempty"];
+  optional LocalObjectReference secretRef = 7 [json_name = "secretRef,omitempty"];
+  optional bool readOnly = 8 [json_name = "readOnly,omitempty"];
 }
 
 message RBDPersistentVolumeSource {
   repeated string monitors = 1;
   optional string image = 2;
-  optional string fsType = 3;
-  optional string pool = 4;
-  optional string user = 5;
-  optional string keyring = 6;
-  optional SecretReference secretRef = 7;
-  optional bool readOnly = 8;
+  optional string fsType = 3 [json_name = "fsType,omitempty"];
+  optional string pool = 4 [json_name = "pool,omitempty"];
+  optional string user = 5 [json_name = "user,omitempty"];
+  optional string keyring = 6 [json_name = "keyring,omitempty"];
+  optional SecretReference secretRef = 7 [json_name = "secretRef,omitempty"];
+  optional bool readOnly = 8 [json_name = "readOnly,omitempty"];
 }
 
 message CinderVolumeSource {
   optional string volumeID = 1;
-  optional string fsType = 2;
-  optional bool readOnly = 3;
-  optional LocalObjectReference secretRef = 4;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
+  optional LocalObjectReference secretRef = 4 [json_name = "secretRef,omitempty"];
 }
 
 message CinderPersistentVolumeSource {
   optional string volumeID = 1;
-  optional string fsType = 2;
-  optional bool readOnly = 3;
-  optional SecretReference secretRef = 4;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
+  optional SecretReference secretRef = 4 [json_name = "secretRef,omitempty"];
 }
 
 message CephFSVolumeSource {
   repeated string monitors = 1;
-  optional string path = 2;
-  optional string user = 3;
-  optional string secretFile = 4;
-  optional LocalObjectReference secretRef = 5;
-  optional bool readOnly = 6;
+  optional string path = 2 [json_name = "path,omitempty"];
+  optional string user = 3 [json_name = "user,omitempty"];
+  optional string secretFile = 4 [json_name = "secretFile,omitempty"];
+  optional LocalObjectReference secretRef = 5 [json_name = "secretRef,omitempty"];
+  optional bool readOnly = 6 [json_name = "readOnly,omitempty"];
 }
 
 message SecretReference {
-  optional string name = 1;
-  optional string namespace = 2;
+  optional string name = 1 [json_name = "name,omitempty"];
+  optional string namespace = 2 [json_name = "namespace,omitempty"];
 }
 
 message CephFSPersistentVolumeSource {
   repeated string monitors = 1;
-  optional string path = 2;
-  optional string user = 3;
-  optional string secretFile = 4;
-  optional SecretReference secretRef = 5;
-  optional bool readOnly = 6;
+  optional string path = 2 [json_name = "path,omitempty"];
+  optional string user = 3 [json_name = "user,omitempty"];
+  optional string secretFile = 4 [json_name = "secretFile,omitempty"];
+  optional SecretReference secretRef = 5 [json_name = "secretRef,omitempty"];
+  optional bool readOnly = 6 [json_name = "readOnly,omitempty"];
 }
 
 message FlockerVolumeSource {
-  optional string datasetName = 1;
-  optional string datasetUUID = 2;
+  optional string datasetName = 1 [json_name = "datasetName,omitempty"];
+  optional string datasetUUID = 2 [json_name = "datasetUUID,omitempty"];
 }
 
 message GCEPersistentDiskVolumeSource {
   optional string pdName = 1;
-  optional string fsType = 2;
-  optional int32 partition = 3;
-  optional bool readOnly = 4;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
+  optional int32 partition = 3 [json_name = "partition,omitempty"];
+  optional bool readOnly = 4 [json_name = "readOnly,omitempty"];
 }
 
 message QuobyteVolumeSource {
   optional string registry = 1;
   optional string volume = 2;
-  optional bool readOnly = 3;
-  optional string user = 4;
-  optional string group = 5;
-  optional string tenant = 6;
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
+  optional string user = 4 [json_name = "user,omitempty"];
+  optional string group = 5 [json_name = "group,omitempty"];
+  optional string tenant = 6 [json_name = "tenant,omitempty"];
 }
 
 message FlexPersistentVolumeSource {
   optional string driver = 1;
-  optional string fsType = 2;
-  optional SecretReference secretRef = 3;
-  optional bool readOnly = 4;
-  map<string, string> options = 5;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
+  optional SecretReference secretRef = 3 [json_name = "secretRef,omitempty"];
+  optional bool readOnly = 4 [json_name = "readOnly,omitempty"];
+  map<string, string> options = 5 [json_name = "options,omitempty"];
 }
 
 message FlexVolumeSource {
   optional string driver = 1;
-  optional string fsType = 2;
-  optional LocalObjectReference secretRef = 3;
-  optional bool readOnly = 4;
-  map<string, string> options = 5;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
+  optional LocalObjectReference secretRef = 3 [json_name = "secretRef,omitempty"];
+  optional bool readOnly = 4 [json_name = "readOnly,omitempty"];
+  map<string, string> options = 5 [json_name = "options,omitempty"];
 }
 
 message AWSElasticBlockStoreVolumeSource {
   optional string volumeID = 1;
-  optional string fsType = 2;
-  optional int32 partition = 3;
-  optional bool readOnly = 4;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
+  optional int32 partition = 3 [json_name = "partition,omitempty"];
+  optional bool readOnly = 4 [json_name = "readOnly,omitempty"];
 }
 
 message GitRepoVolumeSource {
   optional string repository = 1;
-  optional string revision = 2;
-  optional string directory = 3;
+  optional string revision = 2 [json_name = "revision,omitempty"];
+  optional string directory = 3 [json_name = "directory,omitempty"];
 }
 
 message SecretVolumeSource {
-  optional string secretName = 1;
-  repeated KeyToPath items = 2;
-  optional int32 defaultMode = 3;
-  optional bool optional = 4;
+  optional string secretName = 1 [json_name = "secretName,omitempty"];
+  repeated KeyToPath items = 2 [json_name = "items,omitempty"];
+  optional int32 defaultMode = 3 [json_name = "defaultMode,omitempty"];
+  optional bool optional = 4 [json_name = "optional,omitempty"];
 }
 
 message SecretProjection {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ""];
-  repeated KeyToPath items = 2;
-  optional bool optional = 4;
+  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  repeated KeyToPath items = 2 [json_name = "items,omitempty"];
+  optional bool optional = 4 [json_name = "optional,omitempty"];
 }
 
 message NFSVolumeSource {
   optional string server = 1;
   optional string path = 2;
-  optional bool readOnly = 3;
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
 }
 
 message ISCSIVolumeSource {
   optional string targetPortal = 1;
   optional string iqn = 2;
   optional int32 lun = 3;
-  optional string iscsiInterface = 4;
-  optional string fsType = 5;
-  optional bool readOnly = 6;
-  repeated string portals = 7;
-  optional bool chapAuthDiscovery = 8;
-  optional bool chapAuthSession = 11;
-  optional LocalObjectReference secretRef = 10;
-  optional string initiatorName = 12;
+  optional string iscsiInterface = 4 [json_name = "iscsiInterface,omitempty"];
+  optional string fsType = 5 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 6 [json_name = "readOnly,omitempty"];
+  repeated string portals = 7 [json_name = "portals,omitempty"];
+  optional bool chapAuthDiscovery = 8 [json_name = "chapAuthDiscovery,omitempty"];
+  optional bool chapAuthSession = 11 [json_name = "chapAuthSession,omitempty"];
+  optional LocalObjectReference secretRef = 10 [json_name = "secretRef,omitempty"];
+  optional string initiatorName = 12 [json_name = "initiatorName,omitempty"];
 }
 
 message ISCSIPersistentVolumeSource {
   optional string targetPortal = 1;
   optional string iqn = 2;
   optional int32 lun = 3;
-  optional string iscsiInterface = 4;
-  optional string fsType = 5;
-  optional bool readOnly = 6;
-  repeated string portals = 7;
-  optional bool chapAuthDiscovery = 8;
-  optional bool chapAuthSession = 11;
-  optional SecretReference secretRef = 10;
-  optional string initiatorName = 12;
+  optional string iscsiInterface = 4 [json_name = "iscsiInterface,omitempty"];
+  optional string fsType = 5 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 6 [json_name = "readOnly,omitempty"];
+  repeated string portals = 7 [json_name = "portals,omitempty"];
+  optional bool chapAuthDiscovery = 8 [json_name = "chapAuthDiscovery,omitempty"];
+  optional bool chapAuthSession = 11 [json_name = "chapAuthSession,omitempty"];
+  optional SecretReference secretRef = 10 [json_name = "secretRef,omitempty"];
+  optional string initiatorName = 12 [json_name = "initiatorName,omitempty"];
 }
 
 message FCVolumeSource {
-  repeated string targetWWNs = 1;
-  optional int32 lun = 2;
-  optional string fsType = 3;
-  optional bool readOnly = 4;
-  repeated string wwids = 5;
+  repeated string targetWWNs = 1 [json_name = "targetWWNs,omitempty"];
+  optional int32 lun = 2 [json_name = "lun,omitempty"];
+  optional string fsType = 3 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 4 [json_name = "readOnly,omitempty"];
+  repeated string wwids = 5 [json_name = "wwids,omitempty"];
 }
 
 message AzureFileVolumeSource {
   optional string secretName = 1;
   optional string shareName = 2;
-  optional bool readOnly = 3;
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
 }
 
 message AzureFilePersistentVolumeSource {
   optional string secretName = 1;
   optional string shareName = 2;
-  optional bool readOnly = 3;
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
   optional string secretNamespace = 4;
 }
 
 message VsphereVirtualDiskVolumeSource {
   optional string volumePath = 1;
-  optional string fsType = 2;
-  optional string storagePolicyName = 3;
-  optional string storagePolicyID = 4;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
+  optional string storagePolicyName = 3 [json_name = "storagePolicyName,omitempty"];
+  optional string storagePolicyID = 4 [json_name = "storagePolicyID,omitempty"];
 }
 
 message PhotonPersistentDiskVolumeSource {
   optional string pdID = 1;
-  optional string fsType = 2;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
 }
 
 message AzureDiskVolumeSource {
   optional string diskName = 1;
   optional string diskURI = 2;
-  optional string cachingMode = 3;
-  optional string fsType = 4;
-  optional bool readOnly = 5;
-  optional string kind = 6;
+  optional string cachingMode = 3 [json_name = "cachingMode,omitempty"];
+  optional string fsType = 4 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 5 [json_name = "readOnly,omitempty"];
+  optional string kind = 6 [json_name = "kind,omitempty"];
 }
 
 message PortworxVolumeSource {
   optional string volumeID = 1;
-  optional string fsType = 2;
-  optional bool readOnly = 3;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
 }
 
 message ScaleIOVolumeSource {
   optional string gateway = 1;
   optional string system = 2;
   optional LocalObjectReference secretRef = 3;
-  optional bool sslEnabled = 4;
-  optional string protectionDomain = 5;
-  optional string storagePool = 6;
-  optional string storageMode = 7;
-  optional string volumeName = 8;
-  optional string fsType = 9;
-  optional bool readOnly = 10;
+  optional bool sslEnabled = 4 [json_name = "sslEnabled,omitempty"];
+  optional string protectionDomain = 5 [json_name = "protectionDomain,omitempty"];
+  optional string storagePool = 6 [json_name = "storagePool,omitempty"];
+  optional string storageMode = 7 [json_name = "storageMode,omitempty"];
+  optional string volumeName = 8 [json_name = "volumeName,omitempty"];
+  optional string fsType = 9 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 10 [json_name = "readOnly,omitempty"];
 }
 
 message ScaleIOPersistentVolumeSource {
   optional string gateway = 1;
   optional string system = 2;
   optional SecretReference secretRef = 3;
-  optional bool sslEnabled = 4;
-  optional string protectionDomain = 5;
-  optional string storagePool = 6;
-  optional string storageMode = 7;
-  optional string volumeName = 8;
-  optional string fsType = 9;
-  optional bool readOnly = 10;
+  optional bool sslEnabled = 4 [json_name = "sslEnabled,omitempty"];
+  optional string protectionDomain = 5 [json_name = "protectionDomain,omitempty"];
+  optional string storagePool = 6 [json_name = "storagePool,omitempty"];
+  optional string storageMode = 7 [json_name = "storageMode,omitempty"];
+  optional string volumeName = 8 [json_name = "volumeName,omitempty"];
+  optional string fsType = 9 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 10 [json_name = "readOnly,omitempty"];
 }
 
 message StorageOSVolumeSource {
-  optional string volumeName = 1;
-  optional string volumeNamespace = 2;
-  optional string fsType = 3;
-  optional bool readOnly = 4;
-  optional LocalObjectReference secretRef = 5;
+  optional string volumeName = 1 [json_name = "volumeName,omitempty"];
+  optional string volumeNamespace = 2 [json_name = "volumeNamespace,omitempty"];
+  optional string fsType = 3 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 4 [json_name = "readOnly,omitempty"];
+  optional LocalObjectReference secretRef = 5 [json_name = "secretRef,omitempty"];
 }
 
 message StorageOSPersistentVolumeSource {
-  optional string volumeName = 1;
-  optional string volumeNamespace = 2;
-  optional string fsType = 3;
-  optional bool readOnly = 4;
-  optional ObjectReference secretRef = 5;
+  optional string volumeName = 1 [json_name = "volumeName,omitempty"];
+  optional string volumeNamespace = 2 [json_name = "volumeNamespace,omitempty"];
+  optional string fsType = 3 [json_name = "fsType,omitempty"];
+  optional bool readOnly = 4 [json_name = "readOnly,omitempty"];
+  optional ObjectReference secretRef = 5 [json_name = "secretRef,omitempty"];
 }
 
 message ConfigMapVolumeSource {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ""];
-  repeated KeyToPath items = 2;
-  optional int32 defaultMode = 3;
-  optional bool optional = 4;
+  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  repeated KeyToPath items = 2 [json_name = "items,omitempty"];
+  optional int32 defaultMode = 3 [json_name = "defaultMode,omitempty"];
+  optional bool optional = 4 [json_name = "optional,omitempty"];
 }
 
 message ConfigMapProjection {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ""];
-  repeated KeyToPath items = 2;
-  optional bool optional = 4;
+  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  repeated KeyToPath items = 2 [json_name = "items,omitempty"];
+  optional bool optional = 4 [json_name = "optional,omitempty"];
 }
 
 message ServiceAccountTokenProjection {
-  optional string audience = 1;
-  optional int64 expirationSeconds = 2;
+  optional string audience = 1 [json_name = "audience,omitempty"];
+  optional int64 expirationSeconds = 2 [json_name = "expirationSeconds,omitempty"];
   optional string path = 3;
 }
 
 message ProjectedVolumeSource {
   repeated VolumeProjection sources = 1;
-  optional int32 defaultMode = 2;
+  optional int32 defaultMode = 2 [json_name = "defaultMode,omitempty"];
 }
 
 message VolumeProjection {
-  optional SecretProjection secret = 1;
-  optional DownwardAPIProjection downwardAPI = 2;
-  optional ConfigMapProjection configMap = 3;
-  optional ServiceAccountTokenProjection serviceAccountToken = 4;
+  optional SecretProjection secret = 1 [json_name = "secret,omitempty"];
+  optional DownwardAPIProjection downwardAPI = 2 [json_name = "downwardAPI,omitempty"];
+  optional ConfigMapProjection configMap = 3 [json_name = "configMap,omitempty"];
+  optional ServiceAccountTokenProjection serviceAccountToken = 4 [json_name = "serviceAccountToken,omitempty"];
 }
 
 message KeyToPath {
   optional string key = 1;
   optional string path = 2;
-  optional int32 mode = 3;
+  optional int32 mode = 3 [json_name = "mode,omitempty"];
 }
 
 message LocalVolumeSource {
   optional string path = 1;
-  optional string fsType = 2;
+  optional string fsType = 2 [json_name = "fsType,omitempty"];
 }
 
 message CSIPersistentVolumeSource {
   optional string driver = 1;
   optional string volumeHandle = 2;
-  optional bool readOnly = 3;
-  optional string fsType = 4;
-  map<string, string> volumeAttributes = 5;
-  optional SecretReference controllerPublishSecretRef = 6;
-  optional SecretReference nodeStageSecretRef = 7;
-  optional SecretReference nodePublishSecretRef = 8;
-  optional SecretReference controllerExpandSecretRef = 9;
-  optional SecretReference nodeExpandSecretRef = 10;
+  optional bool readOnly = 3 [json_name = "readOnly,omitempty"];
+  optional string fsType = 4 [json_name = "fsType,omitempty"];
+  map<string, string> volumeAttributes = 5 [json_name = "volumeAttributes,omitempty"];
+  optional SecretReference controllerPublishSecretRef = 6 [json_name = "controllerPublishSecretRef,omitempty"];
+  optional SecretReference nodeStageSecretRef = 7 [json_name = "nodeStageSecretRef,omitempty"];
+  optional SecretReference nodePublishSecretRef = 8 [json_name = "nodePublishSecretRef,omitempty"];
+  optional SecretReference controllerExpandSecretRef = 9 [json_name = "controllerExpandSecretRef,omitempty"];
+  optional SecretReference nodeExpandSecretRef = 10 [json_name = "nodeExpandSecretRef,omitempty"];
 }
 
 message CSIVolumeSource {
   optional string driver = 1;
-  optional bool readOnly = 2;
-  optional string fsType = 3;
-  map<string, string> volumeAttributes = 4;
-  optional LocalObjectReference nodePublishSecretRef = 5;
+  optional bool readOnly = 2 [json_name = "readOnly,omitempty"];
+  optional string fsType = 3 [json_name = "fsType,omitempty"];
+  map<string, string> volumeAttributes = 4 [json_name = "volumeAttributes,omitempty"];
+  optional LocalObjectReference nodePublishSecretRef = 5 [json_name = "nodePublishSecretRef,omitempty"];
 }
 
 message EphemeralVolumeSource {
-  optional PersistentVolumeClaimTemplate volumeClaimTemplate = 1;
+  optional PersistentVolumeClaimTemplate volumeClaimTemplate = 1 [json_name = "volumeClaimTemplate,omitempty"];
 }
 
 message PersistentVolumeClaimTemplate {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
   optional PersistentVolumeClaimSpec spec = 2;
 }
 
 message ContainerPort {
-  optional string name = 1;
-  optional int32 hostPort = 2;
+  optional string name = 1 [json_name = "name,omitempty"];
+  optional int32 hostPort = 2 [json_name = "hostPort,omitempty"];
   optional int32 containerPort = 3;
-  optional string protocol = 4;
-  optional string hostIP = 5;
+  optional string protocol = 4 [json_name = "protocol,omitempty"];
+  optional string hostIP = 5 [json_name = "hostIP,omitempty"];
 }
 
 message VolumeMount {
   optional string name = 1;
-  optional bool readOnly = 2;
+  optional bool readOnly = 2 [json_name = "readOnly,omitempty"];
   optional string mountPath = 3;
-  optional string subPath = 4;
-  optional string mountPropagation = 5;
-  optional string subPathExpr = 6;
+  optional string subPath = 4 [json_name = "subPath,omitempty"];
+  optional string mountPropagation = 5 [json_name = "mountPropagation,omitempty"];
+  optional string subPathExpr = 6 [json_name = "subPathExpr,omitempty"];
 }
 
 message VolumeDevice {
@@ -521,54 +529,54 @@ message VolumeDevice {
 
 message EnvVar {
   optional string name = 1;
-  optional string value = 2;
-  optional EnvVarSource valueFrom = 3;
+  optional string value = 2 [json_name = "value,omitempty"];
+  optional EnvVarSource valueFrom = 3 [json_name = "valueFrom,omitempty"];
 }
 
 message EnvVarSource {
-  optional ObjectFieldSelector fieldRef = 1;
-  optional ResourceFieldSelector resourceFieldRef = 2;
-  optional ConfigMapKeySelector configMapKeyRef = 3;
-  optional SecretKeySelector secretKeyRef = 4;
+  optional ObjectFieldSelector fieldRef = 1 [json_name = "fieldRef,omitempty"];
+  optional ResourceFieldSelector resourceFieldRef = 2 [json_name = "resourceFieldRef,omitempty"];
+  optional ConfigMapKeySelector configMapKeyRef = 3 [json_name = "configMapKeyRef,omitempty"];
+  optional SecretKeySelector secretKeyRef = 4 [json_name = "secretKeyRef,omitempty"];
 }
 
 message ObjectFieldSelector {
-  optional string apiVersion = 1;
+  optional string apiVersion = 1 [json_name = "apiVersion,omitempty"];
   optional string fieldPath = 2;
 }
 
 message ResourceFieldSelector {
-  optional string containerName = 1;
+  optional string containerName = 1 [json_name = "containerName,omitempty"];
   optional string resource = 2;
-  optional k8s.io.apimachinery.pkg.api.resource.Quantity divisor = 3;
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity divisor = 3 [json_name = "divisor,omitempty"];
 }
 
 message ConfigMapKeySelector {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ""];
+  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
   optional string key = 2;
-  optional bool optional = 3;
+  optional bool optional = 3 [json_name = "optional,omitempty"];
 }
 
 message SecretKeySelector {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ""];
+  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
   optional string key = 2;
-  optional bool optional = 3;
+  optional bool optional = 3 [json_name = "optional,omitempty"];
 }
 
 message EnvFromSource {
-  optional string prefix = 1;
-  optional ConfigMapEnvSource configMapRef = 2;
-  optional SecretEnvSource secretRef = 3;
+  optional string prefix = 1 [json_name = "prefix,omitempty"];
+  optional ConfigMapEnvSource configMapRef = 2 [json_name = "configMapRef,omitempty"];
+  optional SecretEnvSource secretRef = 3 [json_name = "secretRef,omitempty"];
 }
 
 message ConfigMapEnvSource {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ""];
-  optional bool optional = 2;
+  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional bool optional = 2 [json_name = "optional,omitempty"];
 }
 
 message SecretEnvSource {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ""];
-  optional bool optional = 2;
+  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional bool optional = 2 [json_name = "optional,omitempty"];
 }
 
 message HTTPHeader {
@@ -577,16 +585,16 @@ message HTTPHeader {
 }
 
 message HTTPGetAction {
-  optional string path = 1;
+  optional string path = 1 [json_name = "path,omitempty"];
   optional k8s.io.apimachinery.pkg.util.intstr.IntOrString port = 2;
-  optional string host = 3;
-  optional string scheme = 4;
-  repeated HTTPHeader httpHeaders = 5;
+  optional string host = 3 [json_name = "host,omitempty"];
+  optional string scheme = 4 [json_name = "scheme,omitempty"];
+  repeated HTTPHeader httpHeaders = 5 [json_name = "httpHeaders,omitempty"];
 }
 
 message TCPSocketAction {
   optional k8s.io.apimachinery.pkg.util.intstr.IntOrString port = 1;
-  optional string host = 2;
+  optional string host = 2 [json_name = "host,omitempty"];
 }
 
 message GRPCAction {
@@ -595,28 +603,28 @@ message GRPCAction {
 }
 
 message ExecAction {
-  repeated string command = 1;
+  repeated string command = 1 [json_name = "command,omitempty"];
 }
 
 message Probe {
-  optional ProbeHandler handler = 1 [json_name = ""];
-  optional int32 initialDelaySeconds = 2;
-  optional int32 timeoutSeconds = 3;
-  optional int32 periodSeconds = 4;
-  optional int32 successThreshold = 5;
-  optional int32 failureThreshold = 6;
-  optional int64 terminationGracePeriodSeconds = 7;
+  optional ProbeHandler handler = 1 [json_name = ",inline"];
+  optional int32 initialDelaySeconds = 2 [json_name = "initialDelaySeconds,omitempty"];
+  optional int32 timeoutSeconds = 3 [json_name = "timeoutSeconds,omitempty"];
+  optional int32 periodSeconds = 4 [json_name = "periodSeconds,omitempty"];
+  optional int32 successThreshold = 5 [json_name = "successThreshold,omitempty"];
+  optional int32 failureThreshold = 6 [json_name = "failureThreshold,omitempty"];
+  optional int64 terminationGracePeriodSeconds = 7 [json_name = "terminationGracePeriodSeconds,omitempty"];
 }
 
 message Capabilities {
-  repeated string add = 1;
-  repeated string drop = 2;
+  repeated string add = 1 [json_name = "add,omitempty"];
+  repeated string drop = 2 [json_name = "drop,omitempty"];
 }
 
 message ResourceRequirements {
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> limits = 1;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> requests = 2;
-  repeated ResourceClaim claims = 3;
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> limits = 1 [json_name = "limits,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> requests = 2 [json_name = "requests,omitempty"];
+  repeated ResourceClaim claims = 3 [json_name = "claims,omitempty"];
 }
 
 message ResourceClaim {
@@ -625,91 +633,91 @@ message ResourceClaim {
 
 message Container {
   optional string name = 1;
-  optional string image = 2;
-  repeated string command = 3;
-  repeated string args = 4;
-  optional string workingDir = 5;
-  repeated ContainerPort ports = 6;
-  repeated EnvFromSource envFrom = 19;
-  repeated EnvVar env = 7;
-  optional ResourceRequirements resources = 8;
-  repeated VolumeMount volumeMounts = 9;
-  repeated VolumeDevice volumeDevices = 21;
-  optional Probe livenessProbe = 10;
-  optional Probe readinessProbe = 11;
-  optional Probe startupProbe = 22;
-  optional Lifecycle lifecycle = 12;
-  optional string terminationMessagePath = 13;
-  optional string terminationMessagePolicy = 20;
-  optional string imagePullPolicy = 14;
-  optional SecurityContext securityContext = 15;
-  optional bool stdin = 16;
-  optional bool stdinOnce = 17;
-  optional bool tty = 18;
+  optional string image = 2 [json_name = "image,omitempty"];
+  repeated string command = 3 [json_name = "command,omitempty"];
+  repeated string args = 4 [json_name = "args,omitempty"];
+  optional string workingDir = 5 [json_name = "workingDir,omitempty"];
+  repeated ContainerPort ports = 6 [json_name = "ports,omitempty"];
+  repeated EnvFromSource envFrom = 19 [json_name = "envFrom,omitempty"];
+  repeated EnvVar env = 7 [json_name = "env,omitempty"];
+  optional ResourceRequirements resources = 8 [json_name = "resources,omitempty"];
+  repeated VolumeMount volumeMounts = 9 [json_name = "volumeMounts,omitempty"];
+  repeated VolumeDevice volumeDevices = 21 [json_name = "volumeDevices,omitempty"];
+  optional Probe livenessProbe = 10 [json_name = "livenessProbe,omitempty"];
+  optional Probe readinessProbe = 11 [json_name = "readinessProbe,omitempty"];
+  optional Probe startupProbe = 22 [json_name = "startupProbe,omitempty"];
+  optional Lifecycle lifecycle = 12 [json_name = "lifecycle,omitempty"];
+  optional string terminationMessagePath = 13 [json_name = "terminationMessagePath,omitempty"];
+  optional string terminationMessagePolicy = 20 [json_name = "terminationMessagePolicy,omitempty"];
+  optional string imagePullPolicy = 14 [json_name = "imagePullPolicy,omitempty"];
+  optional SecurityContext securityContext = 15 [json_name = "securityContext,omitempty"];
+  optional bool stdin = 16 [json_name = "stdin,omitempty"];
+  optional bool stdinOnce = 17 [json_name = "stdinOnce,omitempty"];
+  optional bool tty = 18 [json_name = "tty,omitempty"];
 }
 
 message ProbeHandler {
-  optional ExecAction exec = 1;
-  optional HTTPGetAction httpGet = 2;
-  optional TCPSocketAction tcpSocket = 3;
-  optional GRPCAction grpc = 4;
+  optional ExecAction exec = 1 [json_name = "exec,omitempty"];
+  optional HTTPGetAction httpGet = 2 [json_name = "httpGet,omitempty"];
+  optional TCPSocketAction tcpSocket = 3 [json_name = "tcpSocket,omitempty"];
+  optional GRPCAction grpc = 4 [json_name = "grpc,omitempty"];
 }
 
 message LifecycleHandler {
-  optional ExecAction exec = 1;
-  optional HTTPGetAction httpGet = 2;
-  optional TCPSocketAction tcpSocket = 3;
+  optional ExecAction exec = 1 [json_name = "exec,omitempty"];
+  optional HTTPGetAction httpGet = 2 [json_name = "httpGet,omitempty"];
+  optional TCPSocketAction tcpSocket = 3 [json_name = "tcpSocket,omitempty"];
 }
 
 message Lifecycle {
-  optional LifecycleHandler postStart = 1;
-  optional LifecycleHandler preStop = 2;
+  optional LifecycleHandler postStart = 1 [json_name = "postStart,omitempty"];
+  optional LifecycleHandler preStop = 2 [json_name = "preStop,omitempty"];
 }
 
 message ContainerStateWaiting {
-  optional string reason = 1;
-  optional string message = 2;
+  optional string reason = 1 [json_name = "reason,omitempty"];
+  optional string message = 2 [json_name = "message,omitempty"];
 }
 
 message ContainerStateRunning {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time startedAt = 1;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time startedAt = 1 [json_name = "startedAt,omitempty"];
 }
 
 message ContainerStateTerminated {
   optional int32 exitCode = 1;
-  optional int32 signal = 2;
-  optional string reason = 3;
-  optional string message = 4;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time startedAt = 5;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time finishedAt = 6;
-  optional string containerID = 7;
+  optional int32 signal = 2 [json_name = "signal,omitempty"];
+  optional string reason = 3 [json_name = "reason,omitempty"];
+  optional string message = 4 [json_name = "message,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time startedAt = 5 [json_name = "startedAt,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time finishedAt = 6 [json_name = "finishedAt,omitempty"];
+  optional string containerID = 7 [json_name = "containerID,omitempty"];
 }
 
 message ContainerState {
-  optional ContainerStateWaiting waiting = 1;
-  optional ContainerStateRunning running = 2;
-  optional ContainerStateTerminated terminated = 3;
+  optional ContainerStateWaiting waiting = 1 [json_name = "waiting,omitempty"];
+  optional ContainerStateRunning running = 2 [json_name = "running,omitempty"];
+  optional ContainerStateTerminated terminated = 3 [json_name = "terminated,omitempty"];
 }
 
 message ContainerStatus {
   optional string name = 1;
-  optional ContainerState state = 2;
-  optional ContainerState lastState = 3;
+  optional ContainerState state = 2 [json_name = "state,omitempty"];
+  optional ContainerState lastState = 3 [json_name = "lastState,omitempty"];
   optional bool ready = 4;
   optional int32 restartCount = 5;
   optional string image = 6;
   optional string imageID = 7;
-  optional string containerID = 8;
-  optional bool started = 9;
+  optional string containerID = 8 [json_name = "containerID,omitempty"];
+  optional bool started = 9 [json_name = "started,omitempty"];
 }
 
 message PodCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastProbeTime = 3;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4;
-  optional string reason = 5;
-  optional string message = 6;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastProbeTime = 3 [json_name = "lastProbeTime,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 5 [json_name = "reason,omitempty"];
+  optional string message = 6 [json_name = "message,omitempty"];
 }
 
 message NodeSelector {
@@ -717,18 +725,18 @@ message NodeSelector {
 }
 
 message NodeSelectorTerm {
-  repeated NodeSelectorRequirement matchExpressions = 1;
-  repeated NodeSelectorRequirement matchFields = 2;
+  repeated NodeSelectorRequirement matchExpressions = 1 [json_name = "matchExpressions,omitempty"];
+  repeated NodeSelectorRequirement matchFields = 2 [json_name = "matchFields,omitempty"];
 }
 
 message NodeSelectorRequirement {
   optional string key = 1;
   optional string operator = 2;
-  repeated string values = 3;
+  repeated string values = 3 [json_name = "values,omitempty"];
 }
 
 message TopologySelectorTerm {
-  repeated TopologySelectorLabelRequirement matchLabelExpressions = 1;
+  repeated TopologySelectorLabelRequirement matchLabelExpressions = 1 [json_name = "matchLabelExpressions,omitempty"];
 }
 
 message TopologySelectorLabelRequirement {
@@ -737,19 +745,19 @@ message TopologySelectorLabelRequirement {
 }
 
 message Affinity {
-  optional NodeAffinity nodeAffinity = 1;
-  optional PodAffinity podAffinity = 2;
-  optional PodAntiAffinity podAntiAffinity = 3;
+  optional NodeAffinity nodeAffinity = 1 [json_name = "nodeAffinity,omitempty"];
+  optional PodAffinity podAffinity = 2 [json_name = "podAffinity,omitempty"];
+  optional PodAntiAffinity podAntiAffinity = 3 [json_name = "podAntiAffinity,omitempty"];
 }
 
 message PodAffinity {
-  repeated PodAffinityTerm requiredDuringSchedulingIgnoredDuringExecution = 1;
-  repeated WeightedPodAffinityTerm preferredDuringSchedulingIgnoredDuringExecution = 2;
+  repeated PodAffinityTerm requiredDuringSchedulingIgnoredDuringExecution = 1 [json_name = "requiredDuringSchedulingIgnoredDuringExecution,omitempty"];
+  repeated WeightedPodAffinityTerm preferredDuringSchedulingIgnoredDuringExecution = 2 [json_name = "preferredDuringSchedulingIgnoredDuringExecution,omitempty"];
 }
 
 message PodAntiAffinity {
-  repeated PodAffinityTerm requiredDuringSchedulingIgnoredDuringExecution = 1;
-  repeated WeightedPodAffinityTerm preferredDuringSchedulingIgnoredDuringExecution = 2;
+  repeated PodAffinityTerm requiredDuringSchedulingIgnoredDuringExecution = 1 [json_name = "requiredDuringSchedulingIgnoredDuringExecution,omitempty"];
+  repeated WeightedPodAffinityTerm preferredDuringSchedulingIgnoredDuringExecution = 2 [json_name = "preferredDuringSchedulingIgnoredDuringExecution,omitempty"];
 }
 
 message WeightedPodAffinityTerm {
@@ -758,15 +766,15 @@ message WeightedPodAffinityTerm {
 }
 
 message PodAffinityTerm {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector labelSelector = 1;
-  repeated string namespaces = 2;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector labelSelector = 1 [json_name = "labelSelector,omitempty"];
+  repeated string namespaces = 2 [json_name = "namespaces,omitempty"];
   optional string topologyKey = 3;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector namespaceSelector = 4;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector namespaceSelector = 4 [json_name = "namespaceSelector,omitempty"];
 }
 
 message NodeAffinity {
-  optional NodeSelector requiredDuringSchedulingIgnoredDuringExecution = 1;
-  repeated PreferredSchedulingTerm preferredDuringSchedulingIgnoredDuringExecution = 2;
+  optional NodeSelector requiredDuringSchedulingIgnoredDuringExecution = 1 [json_name = "requiredDuringSchedulingIgnoredDuringExecution,omitempty"];
+  repeated PreferredSchedulingTerm preferredDuringSchedulingIgnoredDuringExecution = 2 [json_name = "preferredDuringSchedulingIgnoredDuringExecution,omitempty"];
 }
 
 message PreferredSchedulingTerm {
@@ -776,17 +784,17 @@ message PreferredSchedulingTerm {
 
 message Taint {
   optional string key = 1;
-  optional string value = 2;
+  optional string value = 2 [json_name = "value,omitempty"];
   optional string effect = 3;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time timeAdded = 4;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time timeAdded = 4 [json_name = "timeAdded,omitempty"];
 }
 
 message Toleration {
-  optional string key = 1;
-  optional string operator = 2;
-  optional string value = 3;
-  optional string effect = 4;
-  optional int64 tolerationSeconds = 5;
+  optional string key = 1 [json_name = "key,omitempty"];
+  optional string operator = 2 [json_name = "operator,omitempty"];
+  optional string value = 3 [json_name = "value,omitempty"];
+  optional string effect = 4 [json_name = "effect,omitempty"];
+  optional int64 tolerationSeconds = 5 [json_name = "tolerationSeconds,omitempty"];
 }
 
 message PodReadinessGate {
@@ -794,55 +802,55 @@ message PodReadinessGate {
 }
 
 message PodSpec {
-  repeated Volume volumes = 1;
-  repeated Container initContainers = 20;
+  repeated Volume volumes = 1 [json_name = "volumes,omitempty"];
+  repeated Container initContainers = 20 [json_name = "initContainers,omitempty"];
   repeated Container containers = 2;
-  repeated EphemeralContainer ephemeralContainers = 34;
-  optional string restartPolicy = 3;
-  optional int64 terminationGracePeriodSeconds = 4;
-  optional int64 activeDeadlineSeconds = 5;
-  optional string dnsPolicy = 6;
-  map<string, string> nodeSelector = 7;
-  optional string serviceAccountName = 8;
-  optional string serviceAccount = 9;
-  optional bool automountServiceAccountToken = 21;
-  optional string nodeName = 10;
-  optional bool hostNetwork = 11;
-  optional bool hostPID = 12;
-  optional bool hostIPC = 13;
-  optional bool shareProcessNamespace = 27;
-  optional PodSecurityContext securityContext = 14;
-  repeated LocalObjectReference imagePullSecrets = 15;
-  optional string hostname = 16;
-  optional string subdomain = 17;
-  optional Affinity affinity = 18;
-  optional string schedulerName = 19;
-  repeated Toleration tolerations = 22;
-  repeated HostAlias hostAliases = 23;
-  optional string priorityClassName = 24;
-  optional int32 priority = 25;
-  optional PodDNSConfig dnsConfig = 26;
-  repeated PodReadinessGate readinessGates = 28;
-  optional string runtimeClassName = 29;
-  optional bool enableServiceLinks = 30;
-  optional string preemptionPolicy = 31;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> overhead = 32;
-  repeated TopologySpreadConstraint topologySpreadConstraints = 33;
-  optional bool setHostnameAsFQDN = 35;
-  optional PodOS os = 36;
-  optional bool hostUsers = 37;
-  repeated PodSchedulingGate schedulingGates = 38;
-  repeated PodResourceClaim resourceClaims = 39;
+  repeated EphemeralContainer ephemeralContainers = 34 [json_name = "ephemeralContainers,omitempty"];
+  optional string restartPolicy = 3 [json_name = "restartPolicy,omitempty"];
+  optional int64 terminationGracePeriodSeconds = 4 [json_name = "terminationGracePeriodSeconds,omitempty"];
+  optional int64 activeDeadlineSeconds = 5 [json_name = "activeDeadlineSeconds,omitempty"];
+  optional string dnsPolicy = 6 [json_name = "dnsPolicy,omitempty"];
+  map<string, string> nodeSelector = 7 [json_name = "nodeSelector,omitempty"];
+  optional string serviceAccountName = 8 [json_name = "serviceAccountName,omitempty"];
+  optional string serviceAccount = 9 [json_name = "serviceAccount,omitempty"];
+  optional bool automountServiceAccountToken = 21 [json_name = "automountServiceAccountToken,omitempty"];
+  optional string nodeName = 10 [json_name = "nodeName,omitempty"];
+  optional bool hostNetwork = 11 [json_name = "hostNetwork,omitempty"];
+  optional bool hostPID = 12 [json_name = "hostPID,omitempty"];
+  optional bool hostIPC = 13 [json_name = "hostIPC,omitempty"];
+  optional bool shareProcessNamespace = 27 [json_name = "shareProcessNamespace,omitempty"];
+  optional PodSecurityContext securityContext = 14 [json_name = "securityContext,omitempty"];
+  repeated LocalObjectReference imagePullSecrets = 15 [json_name = "imagePullSecrets,omitempty"];
+  optional string hostname = 16 [json_name = "hostname,omitempty"];
+  optional string subdomain = 17 [json_name = "subdomain,omitempty"];
+  optional Affinity affinity = 18 [json_name = "affinity,omitempty"];
+  optional string schedulerName = 19 [json_name = "schedulerName,omitempty"];
+  repeated Toleration tolerations = 22 [json_name = "tolerations,omitempty"];
+  repeated HostAlias hostAliases = 23 [json_name = "hostAliases,omitempty"];
+  optional string priorityClassName = 24 [json_name = "priorityClassName,omitempty"];
+  optional int32 priority = 25 [json_name = "priority,omitempty"];
+  optional PodDNSConfig dnsConfig = 26 [json_name = "dnsConfig,omitempty"];
+  repeated PodReadinessGate readinessGates = 28 [json_name = "readinessGates,omitempty"];
+  optional string runtimeClassName = 29 [json_name = "runtimeClassName,omitempty"];
+  optional bool enableServiceLinks = 30 [json_name = "enableServiceLinks,omitempty"];
+  optional string preemptionPolicy = 31 [json_name = "preemptionPolicy,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> overhead = 32 [json_name = "overhead,omitempty"];
+  repeated TopologySpreadConstraint topologySpreadConstraints = 33 [json_name = "topologySpreadConstraints,omitempty"];
+  optional bool setHostnameAsFQDN = 35 [json_name = "setHostnameAsFQDN,omitempty"];
+  optional PodOS os = 36 [json_name = "os,omitempty"];
+  optional bool hostUsers = 37 [json_name = "hostUsers,omitempty"];
+  repeated PodSchedulingGate schedulingGates = 38 [json_name = "schedulingGates,omitempty"];
+  repeated PodResourceClaim resourceClaims = 39 [json_name = "resourceClaims,omitempty"];
 }
 
 message PodResourceClaim {
   optional string name = 1;
-  optional ClaimSource source = 2;
+  optional ClaimSource source = 2 [json_name = "source,omitempty"];
 }
 
 message ClaimSource {
-  optional string resourceClaimName = 1;
-  optional string resourceClaimTemplateName = 2;
+  optional string resourceClaimName = 1 [json_name = "resourceClaimName,omitempty"];
+  optional string resourceClaimTemplateName = 2 [json_name = "resourceClaimTemplateName,omitempty"];
 }
 
 message PodOS {
@@ -857,289 +865,315 @@ message TopologySpreadConstraint {
   optional int32 maxSkew = 1;
   optional string topologyKey = 2;
   optional string whenUnsatisfiable = 3;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector labelSelector = 4;
-  optional int32 minDomains = 5;
-  optional string nodeAffinityPolicy = 6;
-  optional string nodeTaintsPolicy = 7;
-  repeated string matchLabelKeys = 8;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector labelSelector = 4 [json_name = "labelSelector,omitempty"];
+  optional int32 minDomains = 5 [json_name = "minDomains,omitempty"];
+  optional string nodeAffinityPolicy = 6 [json_name = "nodeAffinityPolicy,omitempty"];
+  optional string nodeTaintsPolicy = 7 [json_name = "nodeTaintsPolicy,omitempty"];
+  repeated string matchLabelKeys = 8 [json_name = "matchLabelKeys,omitempty"];
 }
 
 message HostAlias {
-  optional string ip = 1;
-  repeated string hostnames = 2;
+  optional string ip = 1 [json_name = "ip,omitempty"];
+  repeated string hostnames = 2 [json_name = "hostnames,omitempty"];
 }
 
 message PodSecurityContext {
-  optional SELinuxOptions seLinuxOptions = 1;
-  optional WindowsSecurityContextOptions windowsOptions = 8;
-  optional int64 runAsUser = 2;
-  optional int64 runAsGroup = 6;
-  optional bool runAsNonRoot = 3;
-  repeated int64 supplementalGroups = 4;
-  optional int64 fsGroup = 5;
-  repeated Sysctl sysctls = 7;
-  optional string fsGroupChangePolicy = 9;
-  optional SeccompProfile seccompProfile = 10;
+  optional SELinuxOptions seLinuxOptions = 1 [json_name = "seLinuxOptions,omitempty"];
+  optional WindowsSecurityContextOptions windowsOptions = 8 [json_name = "windowsOptions,omitempty"];
+  optional int64 runAsUser = 2 [json_name = "runAsUser,omitempty"];
+  optional int64 runAsGroup = 6 [json_name = "runAsGroup,omitempty"];
+  optional bool runAsNonRoot = 3 [json_name = "runAsNonRoot,omitempty"];
+  repeated int64 supplementalGroups = 4 [json_name = "supplementalGroups,omitempty"];
+  optional int64 fsGroup = 5 [json_name = "fsGroup,omitempty"];
+  repeated Sysctl sysctls = 7 [json_name = "sysctls,omitempty"];
+  optional string fsGroupChangePolicy = 9 [json_name = "fsGroupChangePolicy,omitempty"];
+  optional SeccompProfile seccompProfile = 10 [json_name = "seccompProfile,omitempty"];
 }
 
 message SeccompProfile {
   optional string type = 1;
-  optional string localhostProfile = 2;
+  optional string localhostProfile = 2 [json_name = "localhostProfile,omitempty"];
 }
 
 message PodDNSConfig {
-  repeated string nameservers = 1;
-  repeated string searches = 2;
-  repeated PodDNSConfigOption options = 3;
+  repeated string nameservers = 1 [json_name = "nameservers,omitempty"];
+  repeated string searches = 2 [json_name = "searches,omitempty"];
+  repeated PodDNSConfigOption options = 3 [json_name = "options,omitempty"];
 }
 
 message PodDNSConfigOption {
-  optional string name = 1;
-  optional string value = 2;
+  optional string name = 1 [json_name = "name,omitempty"];
+  optional string value = 2 [json_name = "value,omitempty"];
 }
 
 message PodIP {
-  optional string ip = 1;
+  optional string ip = 1 [json_name = "ip,omitempty"];
 }
 
 message EphemeralContainerCommon {
   optional string name = 1;
-  optional string image = 2;
-  repeated string command = 3;
-  repeated string args = 4;
-  optional string workingDir = 5;
-  repeated ContainerPort ports = 6;
-  repeated EnvFromSource envFrom = 19;
-  repeated EnvVar env = 7;
-  optional ResourceRequirements resources = 8;
-  repeated VolumeMount volumeMounts = 9;
-  repeated VolumeDevice volumeDevices = 21;
-  optional Probe livenessProbe = 10;
-  optional Probe readinessProbe = 11;
-  optional Probe startupProbe = 22;
-  optional Lifecycle lifecycle = 12;
-  optional string terminationMessagePath = 13;
-  optional string terminationMessagePolicy = 20;
-  optional string imagePullPolicy = 14;
-  optional SecurityContext securityContext = 15;
-  optional bool stdin = 16;
-  optional bool stdinOnce = 17;
-  optional bool tty = 18;
+  optional string image = 2 [json_name = "image,omitempty"];
+  repeated string command = 3 [json_name = "command,omitempty"];
+  repeated string args = 4 [json_name = "args,omitempty"];
+  optional string workingDir = 5 [json_name = "workingDir,omitempty"];
+  repeated ContainerPort ports = 6 [json_name = "ports,omitempty"];
+  repeated EnvFromSource envFrom = 19 [json_name = "envFrom,omitempty"];
+  repeated EnvVar env = 7 [json_name = "env,omitempty"];
+  optional ResourceRequirements resources = 8 [json_name = "resources,omitempty"];
+  repeated VolumeMount volumeMounts = 9 [json_name = "volumeMounts,omitempty"];
+  repeated VolumeDevice volumeDevices = 21 [json_name = "volumeDevices,omitempty"];
+  optional Probe livenessProbe = 10 [json_name = "livenessProbe,omitempty"];
+  optional Probe readinessProbe = 11 [json_name = "readinessProbe,omitempty"];
+  optional Probe startupProbe = 22 [json_name = "startupProbe,omitempty"];
+  optional Lifecycle lifecycle = 12 [json_name = "lifecycle,omitempty"];
+  optional string terminationMessagePath = 13 [json_name = "terminationMessagePath,omitempty"];
+  optional string terminationMessagePolicy = 20 [json_name = "terminationMessagePolicy,omitempty"];
+  optional string imagePullPolicy = 14 [json_name = "imagePullPolicy,omitempty"];
+  optional SecurityContext securityContext = 15 [json_name = "securityContext,omitempty"];
+  optional bool stdin = 16 [json_name = "stdin,omitempty"];
+  optional bool stdinOnce = 17 [json_name = "stdinOnce,omitempty"];
+  optional bool tty = 18 [json_name = "tty,omitempty"];
 }
 
 message EphemeralContainer {
-  optional EphemeralContainerCommon EphemeralContainerCommon = 1 [json_name = ""];
-  optional string targetContainerName = 2;
+  optional EphemeralContainerCommon EphemeralContainerCommon = 1 [json_name = ",inline"];
+  optional string targetContainerName = 2 [json_name = "targetContainerName,omitempty"];
 }
 
 message PodStatus {
-  optional string phase = 1;
-  repeated PodCondition conditions = 2;
-  optional string message = 3;
-  optional string reason = 4;
-  optional string nominatedNodeName = 11;
-  optional string hostIP = 5;
-  optional string podIP = 6;
-  repeated PodIP podIPs = 12;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time startTime = 7;
-  repeated ContainerStatus initContainerStatuses = 10;
-  repeated ContainerStatus containerStatuses = 8;
-  optional string qosClass = 9;
-  repeated ContainerStatus ephemeralContainerStatuses = 13;
+  optional string phase = 1 [json_name = "phase,omitempty"];
+  repeated PodCondition conditions = 2 [json_name = "conditions,omitempty"];
+  optional string message = 3 [json_name = "message,omitempty"];
+  optional string reason = 4 [json_name = "reason,omitempty"];
+  optional string nominatedNodeName = 11 [json_name = "nominatedNodeName,omitempty"];
+  optional string hostIP = 5 [json_name = "hostIP,omitempty"];
+  optional string podIP = 6 [json_name = "podIP,omitempty"];
+  repeated PodIP podIPs = 12 [json_name = "podIPs,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time startTime = 7 [json_name = "startTime,omitempty"];
+  repeated ContainerStatus initContainerStatuses = 10 [json_name = "initContainerStatuses,omitempty"];
+  repeated ContainerStatus containerStatuses = 8 [json_name = "containerStatuses,omitempty"];
+  optional string qosClass = 9 [json_name = "qosClass,omitempty"];
+  repeated ContainerStatus ephemeralContainerStatuses = 13 [json_name = "ephemeralContainerStatuses,omitempty"];
 }
 
 message PodStatusResult {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional PodStatus status = 2;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional PodStatus status = 2 [json_name = "status,omitempty"];
 }
 
 message Pod {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional PodSpec spec = 2;
-  optional PodStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional PodSpec spec = 2 [json_name = "spec,omitempty"];
+  optional PodStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message PodList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated Pod items = 2;
 }
 
 message PodTemplateSpec {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional PodSpec spec = 2;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional PodSpec spec = 2 [json_name = "spec,omitempty"];
 }
 
 message PodTemplate {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional PodTemplateSpec template = 2;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional PodTemplateSpec template = 2 [json_name = "template,omitempty"];
 }
 
 message PodTemplateList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated PodTemplate items = 2;
 }
 
 message ReplicationControllerSpec {
-  optional int32 replicas = 1;
-  optional int32 minReadySeconds = 4;
-  map<string, string> selector = 2;
-  optional PodTemplateSpec template = 3;
+  optional int32 replicas = 1 [json_name = "replicas,omitempty"];
+  optional int32 minReadySeconds = 4 [json_name = "minReadySeconds,omitempty"];
+  map<string, string> selector = 2 [json_name = "selector,omitempty"];
+  optional PodTemplateSpec template = 3 [json_name = "template,omitempty"];
 }
 
 message ReplicationControllerStatus {
   optional int32 replicas = 1;
-  optional int32 fullyLabeledReplicas = 2;
-  optional int32 readyReplicas = 4;
-  optional int32 availableReplicas = 5;
-  optional int64 observedGeneration = 3;
-  repeated ReplicationControllerCondition conditions = 6;
+  optional int32 fullyLabeledReplicas = 2 [json_name = "fullyLabeledReplicas,omitempty"];
+  optional int32 readyReplicas = 4 [json_name = "readyReplicas,omitempty"];
+  optional int32 availableReplicas = 5 [json_name = "availableReplicas,omitempty"];
+  optional int64 observedGeneration = 3 [json_name = "observedGeneration,omitempty"];
+  repeated ReplicationControllerCondition conditions = 6 [json_name = "conditions,omitempty"];
 }
 
 message ReplicationControllerCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3;
-  optional string reason = 4;
-  optional string message = 5;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 4 [json_name = "reason,omitempty"];
+  optional string message = 5 [json_name = "message,omitempty"];
 }
 
 message ReplicationController {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional ReplicationControllerSpec spec = 2;
-  optional ReplicationControllerStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional ReplicationControllerSpec spec = 2 [json_name = "spec,omitempty"];
+  optional ReplicationControllerStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message ReplicationControllerList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated ReplicationController items = 2;
 }
 
 message SessionAffinityConfig {
-  optional ClientIPConfig clientIP = 1;
+  optional ClientIPConfig clientIP = 1 [json_name = "clientIP,omitempty"];
 }
 
 message ClientIPConfig {
-  optional int32 timeoutSeconds = 1;
+  optional int32 timeoutSeconds = 1 [json_name = "timeoutSeconds,omitempty"];
 }
 
 message ServiceStatus {
-  optional LoadBalancerStatus loadBalancer = 1;
-  repeated k8s.io.apimachinery.pkg.apis.meta.v1.Condition conditions = 2;
+  optional LoadBalancerStatus loadBalancer = 1 [json_name = "loadBalancer,omitempty"];
+  repeated k8s.io.apimachinery.pkg.apis.meta.v1.Condition conditions = 2 [json_name = "conditions,omitempty"];
 }
 
 message LoadBalancerStatus {
-  repeated LoadBalancerIngress ingress = 1;
+  repeated LoadBalancerIngress ingress = 1 [json_name = "ingress,omitempty"];
 }
 
 message LoadBalancerIngress {
-  optional string ip = 1;
-  optional string hostname = 2;
-  repeated PortStatus ports = 4;
+  optional string ip = 1 [json_name = "ip,omitempty"];
+  optional string hostname = 2 [json_name = "hostname,omitempty"];
+  repeated PortStatus ports = 4 [json_name = "ports,omitempty"];
 }
 
 message ServiceSpec {
-  repeated ServicePort ports = 1;
-  map<string, string> selector = 2;
-  optional string clusterIP = 3;
-  repeated string clusterIPs = 18;
-  optional string type = 4;
-  repeated string externalIPs = 5;
-  optional string sessionAffinity = 7;
-  optional string loadBalancerIP = 8;
-  repeated string loadBalancerSourceRanges = 9;
-  optional string externalName = 10;
-  optional string externalTrafficPolicy = 11;
-  optional int32 healthCheckNodePort = 12;
-  optional bool publishNotReadyAddresses = 13;
-  optional SessionAffinityConfig sessionAffinityConfig = 14;
-  repeated string ipFamilies = 19;
-  optional string ipFamilyPolicy = 17;
-  optional bool allocateLoadBalancerNodePorts = 20;
-  optional string loadBalancerClass = 21;
-  optional string internalTrafficPolicy = 22;
+  repeated ServicePort ports = 1 [json_name = "ports,omitempty"];
+  map<string, string> selector = 2 [json_name = "selector,omitempty"];
+  optional string clusterIP = 3 [json_name = "clusterIP,omitempty"];
+  repeated string clusterIPs = 18 [json_name = "clusterIPs,omitempty"];
+  optional string type = 4 [json_name = "type,omitempty"];
+  repeated string externalIPs = 5 [json_name = "externalIPs,omitempty"];
+  optional string sessionAffinity = 7 [json_name = "sessionAffinity,omitempty"];
+  optional string loadBalancerIP = 8 [json_name = "loadBalancerIP,omitempty"];
+  repeated string loadBalancerSourceRanges = 9 [json_name = "loadBalancerSourceRanges,omitempty"];
+  optional string externalName = 10 [json_name = "externalName,omitempty"];
+  optional string externalTrafficPolicy = 11 [json_name = "externalTrafficPolicy,omitempty"];
+  optional int32 healthCheckNodePort = 12 [json_name = "healthCheckNodePort,omitempty"];
+  optional bool publishNotReadyAddresses = 13 [json_name = "publishNotReadyAddresses,omitempty"];
+  optional SessionAffinityConfig sessionAffinityConfig = 14 [json_name = "sessionAffinityConfig,omitempty"];
+  repeated string ipFamilies = 19 [json_name = "ipFamilies,omitempty"];
+  optional string ipFamilyPolicy = 17 [json_name = "ipFamilyPolicy,omitempty"];
+  optional bool allocateLoadBalancerNodePorts = 20 [json_name = "allocateLoadBalancerNodePorts,omitempty"];
+  optional string loadBalancerClass = 21 [json_name = "loadBalancerClass,omitempty"];
+  optional string internalTrafficPolicy = 22 [json_name = "internalTrafficPolicy,omitempty"];
 }
 
 message ServicePort {
-  optional string name = 1;
-  optional string protocol = 2;
-  optional string appProtocol = 6;
+  optional string name = 1 [json_name = "name,omitempty"];
+  optional string protocol = 2 [json_name = "protocol,omitempty"];
+  optional string appProtocol = 6 [json_name = "appProtocol,omitempty"];
   optional int32 port = 3;
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString targetPort = 4;
-  optional int32 nodePort = 5;
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString targetPort = 4 [json_name = "targetPort,omitempty"];
+  optional int32 nodePort = 5 [json_name = "nodePort,omitempty"];
 }
 
 message Service {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional ServiceSpec spec = 2;
-  optional ServiceStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional ServiceSpec spec = 2 [json_name = "spec,omitempty"];
+  optional ServiceStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message ServiceList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated Service items = 2;
 }
 
 message ServiceAccount {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  repeated ObjectReference secrets = 2;
-  repeated LocalObjectReference imagePullSecrets = 3;
-  optional bool automountServiceAccountToken = 4;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  repeated ObjectReference secrets = 2 [json_name = "secrets,omitempty"];
+  repeated LocalObjectReference imagePullSecrets = 3 [json_name = "imagePullSecrets,omitempty"];
+  optional bool automountServiceAccountToken = 4 [json_name = "automountServiceAccountToken,omitempty"];
 }
 
 message ServiceAccountList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated ServiceAccount items = 2;
 }
 
 message Endpoints {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  repeated EndpointSubset subsets = 2;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  repeated EndpointSubset subsets = 2 [json_name = "subsets,omitempty"];
 }
 
 message EndpointSubset {
-  repeated EndpointAddress addresses = 1;
-  repeated EndpointAddress notReadyAddresses = 2;
-  repeated EndpointPort ports = 3;
+  repeated EndpointAddress addresses = 1 [json_name = "addresses,omitempty"];
+  repeated EndpointAddress notReadyAddresses = 2 [json_name = "notReadyAddresses,omitempty"];
+  repeated EndpointPort ports = 3 [json_name = "ports,omitempty"];
 }
 
 message EndpointAddress {
   optional string ip = 1;
-  optional string hostname = 3;
-  optional string nodeName = 4;
-  optional ObjectReference targetRef = 2;
+  optional string hostname = 3 [json_name = "hostname,omitempty"];
+  optional string nodeName = 4 [json_name = "nodeName,omitempty"];
+  optional ObjectReference targetRef = 2 [json_name = "targetRef,omitempty"];
 }
 
 message EndpointPort {
-  optional string name = 1;
+  optional string name = 1 [json_name = "name,omitempty"];
   optional int32 port = 2;
-  optional string protocol = 3;
-  optional string appProtocol = 4;
+  optional string protocol = 3 [json_name = "protocol,omitempty"];
+  optional string appProtocol = 4 [json_name = "appProtocol,omitempty"];
 }
 
 message EndpointsList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated Endpoints items = 2;
 }
 
 message NodeSpec {
-  optional string podCIDR = 1;
-  repeated string podCIDRs = 7;
-  optional string providerID = 3;
-  optional bool unschedulable = 4;
-  repeated Taint taints = 5;
-  optional NodeConfigSource configSource = 6;
-  optional string externalID = 2;
+  optional string podCIDR = 1 [json_name = "podCIDR,omitempty"];
+  repeated string podCIDRs = 7 [json_name = "podCIDRs,omitempty"];
+  optional string providerID = 3 [json_name = "providerID,omitempty"];
+  optional bool unschedulable = 4 [json_name = "unschedulable,omitempty"];
+  repeated Taint taints = 5 [json_name = "taints,omitempty"];
+  optional NodeConfigSource configSource = 6 [json_name = "configSource,omitempty"];
+  optional string externalID = 2 [json_name = "externalID,omitempty"];
 }
 
 message NodeConfigSource {
-  optional ConfigMapNodeConfigSource configMap = 2;
+  optional ConfigMapNodeConfigSource configMap = 2 [json_name = "configMap,omitempty"];
 }
 
 message ConfigMapNodeConfigSource {
   optional string namespace = 1;
   optional string name = 2;
-  optional string uid = 3;
-  optional string resourceVersion = 4;
+  optional string uid = 3 [json_name = "uid,omitempty"];
+  optional string resourceVersion = 4 [json_name = "resourceVersion,omitempty"];
   optional string kubeletConfigKey = 5;
 }
 
@@ -1148,7 +1182,7 @@ message DaemonEndpoint {
 }
 
 message NodeDaemonEndpoints {
-  optional DaemonEndpoint kubeletEndpoint = 1;
+  optional DaemonEndpoint kubeletEndpoint = 1 [json_name = "kubeletEndpoint,omitempty"];
 }
 
 message NodeSystemInfo {
@@ -1165,24 +1199,24 @@ message NodeSystemInfo {
 }
 
 message NodeConfigStatus {
-  optional NodeConfigSource assigned = 1;
-  optional NodeConfigSource active = 2;
-  optional NodeConfigSource lastKnownGood = 3;
-  optional string error = 4;
+  optional NodeConfigSource assigned = 1 [json_name = "assigned,omitempty"];
+  optional NodeConfigSource active = 2 [json_name = "active,omitempty"];
+  optional NodeConfigSource lastKnownGood = 3 [json_name = "lastKnownGood,omitempty"];
+  optional string error = 4 [json_name = "error,omitempty"];
 }
 
 message NodeStatus {
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> capacity = 1;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> allocatable = 2;
-  optional string phase = 3;
-  repeated NodeCondition conditions = 4;
-  repeated NodeAddress addresses = 5;
-  optional NodeDaemonEndpoints daemonEndpoints = 6;
-  optional NodeSystemInfo nodeInfo = 7;
-  repeated ContainerImage images = 8;
-  repeated string volumesInUse = 9;
-  repeated AttachedVolume volumesAttached = 10;
-  optional NodeConfigStatus config = 11;
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> capacity = 1 [json_name = "capacity,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> allocatable = 2 [json_name = "allocatable,omitempty"];
+  optional string phase = 3 [json_name = "phase,omitempty"];
+  repeated NodeCondition conditions = 4 [json_name = "conditions,omitempty"];
+  repeated NodeAddress addresses = 5 [json_name = "addresses,omitempty"];
+  optional NodeDaemonEndpoints daemonEndpoints = 6 [json_name = "daemonEndpoints,omitempty"];
+  optional NodeSystemInfo nodeInfo = 7 [json_name = "nodeInfo,omitempty"];
+  repeated ContainerImage images = 8 [json_name = "images,omitempty"];
+  repeated string volumesInUse = 9 [json_name = "volumesInUse,omitempty"];
+  repeated AttachedVolume volumesAttached = 10 [json_name = "volumesAttached,omitempty"];
+  optional NodeConfigStatus config = 11 [json_name = "config,omitempty"];
 }
 
 message AttachedVolume {
@@ -1191,32 +1225,32 @@ message AttachedVolume {
 }
 
 message AvoidPods {
-  repeated PreferAvoidPodsEntry preferAvoidPods = 1;
+  repeated PreferAvoidPodsEntry preferAvoidPods = 1 [json_name = "preferAvoidPods,omitempty"];
 }
 
 message PreferAvoidPodsEntry {
   optional PodSignature podSignature = 1;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time evictionTime = 2;
-  optional string reason = 3;
-  optional string message = 4;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time evictionTime = 2 [json_name = "evictionTime,omitempty"];
+  optional string reason = 3 [json_name = "reason,omitempty"];
+  optional string message = 4 [json_name = "message,omitempty"];
 }
 
 message PodSignature {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.OwnerReference podController = 1;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.OwnerReference podController = 1 [json_name = "podController,omitempty"];
 }
 
 message ContainerImage {
   repeated string names = 1;
-  optional int64 sizeBytes = 2;
+  optional int64 sizeBytes = 2 [json_name = "sizeBytes,omitempty"];
 }
 
 message NodeCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastHeartbeatTime = 3;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4;
-  optional string reason = 5;
-  optional string message = 6;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastHeartbeatTime = 3 [json_name = "lastHeartbeatTime,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 5 [json_name = "reason,omitempty"];
+  optional string message = 6 [json_name = "message,omitempty"];
 }
 
 message NodeAddress {
@@ -1225,110 +1259,134 @@ message NodeAddress {
 }
 
 message Node {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional NodeSpec spec = 2;
-  optional NodeStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional NodeSpec spec = 2 [json_name = "spec,omitempty"];
+  optional NodeStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message NodeList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated Node items = 2;
 }
 
 message NamespaceSpec {
-  repeated string finalizers = 1;
+  repeated string finalizers = 1 [json_name = "finalizers,omitempty"];
 }
 
 message NamespaceStatus {
-  optional string phase = 1;
-  repeated NamespaceCondition conditions = 2;
+  optional string phase = 1 [json_name = "phase,omitempty"];
+  repeated NamespaceCondition conditions = 2 [json_name = "conditions,omitempty"];
 }
 
 message NamespaceCondition {
   optional string type = 1;
   optional string status = 2;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4;
-  optional string reason = 5;
-  optional string message = 6;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4 [json_name = "lastTransitionTime,omitempty"];
+  optional string reason = 5 [json_name = "reason,omitempty"];
+  optional string message = 6 [json_name = "message,omitempty"];
 }
 
 message Namespace {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional NamespaceSpec spec = 2;
-  optional NamespaceStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional NamespaceSpec spec = 2 [json_name = "spec,omitempty"];
+  optional NamespaceStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message NamespaceList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated Namespace items = 2;
 }
 
 message Binding {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
   optional ObjectReference target = 2;
 }
 
 message Preconditions {
-  optional string uid = 1;
+  optional string uid = 1 [json_name = "uid,omitempty"];
 }
 
 message PodLogOptions {
-  optional string container = 1;
-  optional bool follow = 2;
-  optional bool previous = 3;
-  optional int64 sinceSeconds = 4;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time sinceTime = 5;
-  optional bool timestamps = 6;
-  optional int64 tailLines = 7;
-  optional int64 limitBytes = 8;
-  optional bool insecureSkipTLSVerifyBackend = 9;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional string container = 1 [json_name = "container,omitempty"];
+  optional bool follow = 2 [json_name = "follow,omitempty"];
+  optional bool previous = 3 [json_name = "previous,omitempty"];
+  optional int64 sinceSeconds = 4 [json_name = "sinceSeconds,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time sinceTime = 5 [json_name = "sinceTime,omitempty"];
+  optional bool timestamps = 6 [json_name = "timestamps,omitempty"];
+  optional int64 tailLines = 7 [json_name = "tailLines,omitempty"];
+  optional int64 limitBytes = 8 [json_name = "limitBytes,omitempty"];
+  optional bool insecureSkipTLSVerifyBackend = 9 [json_name = "insecureSkipTLSVerifyBackend,omitempty"];
 }
 
 message PodAttachOptions {
-  optional bool stdin = 1;
-  optional bool stdout = 2;
-  optional bool stderr = 3;
-  optional bool tty = 4;
-  optional string container = 5;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional bool stdin = 1 [json_name = "stdin,omitempty"];
+  optional bool stdout = 2 [json_name = "stdout,omitempty"];
+  optional bool stderr = 3 [json_name = "stderr,omitempty"];
+  optional bool tty = 4 [json_name = "tty,omitempty"];
+  optional string container = 5 [json_name = "container,omitempty"];
 }
 
 message PodExecOptions {
-  optional bool stdin = 1;
-  optional bool stdout = 2;
-  optional bool stderr = 3;
-  optional bool tty = 4;
-  optional string container = 5;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional bool stdin = 1 [json_name = "stdin,omitempty"];
+  optional bool stdout = 2 [json_name = "stdout,omitempty"];
+  optional bool stderr = 3 [json_name = "stderr,omitempty"];
+  optional bool tty = 4 [json_name = "tty,omitempty"];
+  optional string container = 5 [json_name = "container,omitempty"];
   repeated string command = 6;
 }
 
 message PodPortForwardOptions {
-  repeated int32 ports = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  repeated int32 ports = 1 [json_name = "ports,omitempty"];
 }
 
 message PodProxyOptions {
-  optional string path = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional string path = 1 [json_name = "path,omitempty"];
 }
 
 message NodeProxyOptions {
-  optional string path = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional string path = 1 [json_name = "path,omitempty"];
 }
 
 message ServiceProxyOptions {
-  optional string path = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional string path = 1 [json_name = "path,omitempty"];
 }
 
 message ObjectReference {
-  optional string kind = 1;
-  optional string namespace = 2;
-  optional string name = 3;
-  optional string uid = 4;
-  optional string apiVersion = 5;
-  optional string resourceVersion = 6;
-  optional string fieldPath = 7;
+  optional string kind = 1 [json_name = "kind,omitempty"];
+  optional string namespace = 2 [json_name = "namespace,omitempty"];
+  optional string name = 3 [json_name = "name,omitempty"];
+  optional string uid = 4 [json_name = "uid,omitempty"];
+  optional string apiVersion = 5 [json_name = "apiVersion,omitempty"];
+  optional string resourceVersion = 6 [json_name = "resourceVersion,omitempty"];
+  optional string fieldPath = 7 [json_name = "fieldPath,omitempty"];
 }
 
 message LocalObjectReference {
-  optional string name = 1;
+  optional string name = 1 [json_name = "name,omitempty"];
 }
 
 message TypedLocalObjectReference {
@@ -1338,49 +1396,55 @@ message TypedLocalObjectReference {
 }
 
 message SerializedReference {
-  optional ObjectReference reference = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional ObjectReference reference = 1 [json_name = "reference,omitempty"];
 }
 
 message EventSource {
-  optional string component = 1;
-  optional string host = 2;
+  optional string component = 1 [json_name = "component,omitempty"];
+  optional string host = 2 [json_name = "host,omitempty"];
 }
 
 message Event {
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
   optional ObjectReference involvedObject = 2;
-  optional string reason = 3;
-  optional string message = 4;
-  optional EventSource source = 5;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time firstTimestamp = 6;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTimestamp = 7;
-  optional int32 count = 8;
-  optional string type = 9;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.MicroTime eventTime = 10;
-  optional EventSeries series = 11;
-  optional string action = 12;
-  optional ObjectReference related = 13;
+  optional string reason = 3 [json_name = "reason,omitempty"];
+  optional string message = 4 [json_name = "message,omitempty"];
+  optional EventSource source = 5 [json_name = "source,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time firstTimestamp = 6 [json_name = "firstTimestamp,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTimestamp = 7 [json_name = "lastTimestamp,omitempty"];
+  optional int32 count = 8 [json_name = "count,omitempty"];
+  optional string type = 9 [json_name = "type,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.MicroTime eventTime = 10 [json_name = "eventTime,omitempty"];
+  optional EventSeries series = 11 [json_name = "series,omitempty"];
+  optional string action = 12 [json_name = "action,omitempty"];
+  optional ObjectReference related = 13 [json_name = "related,omitempty"];
   optional string reportingComponent = 14;
   optional string reportingInstance = 15;
 }
 
 message EventSeries {
-  optional int32 count = 1;
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.MicroTime lastObservedTime = 2;
+  optional int32 count = 1 [json_name = "count,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.MicroTime lastObservedTime = 2 [json_name = "lastObservedTime,omitempty"];
 }
 
 message EventList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated Event items = 2;
 }
 
 message LimitRangeItem {
   optional string type = 1;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> max = 2;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> min = 3;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> default = 4;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> defaultRequest = 5;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> maxLimitRequestRatio = 6;
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> max = 2 [json_name = "max,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> min = 3 [json_name = "min,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> default = 4 [json_name = "default,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> defaultRequest = 5 [json_name = "defaultRequest,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> maxLimitRequestRatio = 6 [json_name = "maxLimitRequestRatio,omitempty"];
 }
 
 message LimitRangeSpec {
@@ -1388,135 +1452,157 @@ message LimitRangeSpec {
 }
 
 message LimitRange {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional LimitRangeSpec spec = 2;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional LimitRangeSpec spec = 2 [json_name = "spec,omitempty"];
 }
 
 message LimitRangeList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated LimitRange items = 2;
 }
 
 message ResourceQuotaSpec {
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> hard = 1;
-  repeated string scopes = 2;
-  optional ScopeSelector scopeSelector = 3;
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> hard = 1 [json_name = "hard,omitempty"];
+  repeated string scopes = 2 [json_name = "scopes,omitempty"];
+  optional ScopeSelector scopeSelector = 3 [json_name = "scopeSelector,omitempty"];
 }
 
 message ScopeSelector {
-  repeated ScopedResourceSelectorRequirement matchExpressions = 1;
+  repeated ScopedResourceSelectorRequirement matchExpressions = 1 [json_name = "matchExpressions,omitempty"];
 }
 
 message ScopedResourceSelectorRequirement {
   optional string scopeName = 1;
   optional string operator = 2;
-  repeated string values = 3;
+  repeated string values = 3 [json_name = "values,omitempty"];
 }
 
 message ResourceQuotaStatus {
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> hard = 1;
-  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> used = 2;
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> hard = 1 [json_name = "hard,omitempty"];
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> used = 2 [json_name = "used,omitempty"];
 }
 
 message ResourceQuota {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional ResourceQuotaSpec spec = 2;
-  optional ResourceQuotaStatus status = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional ResourceQuotaSpec spec = 2 [json_name = "spec,omitempty"];
+  optional ResourceQuotaStatus status = 3 [json_name = "status,omitempty"];
 }
 
 message ResourceQuotaList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated ResourceQuota items = 2;
 }
 
 message Secret {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional bool immutable = 5;
-  map<string, bytes> data = 2;
-  map<string, string> stringData = 4;
-  optional string type = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional bool immutable = 5 [json_name = "immutable,omitempty"];
+  map<string, bytes> data = 2 [json_name = "data,omitempty"];
+  map<string, string> stringData = 4 [json_name = "stringData,omitempty"];
+  optional string type = 3 [json_name = "type,omitempty"];
 }
 
 message SecretList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated Secret items = 2;
 }
 
 message ConfigMap {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  optional bool immutable = 4;
-  map<string, string> data = 2;
-  map<string, bytes> binaryData = 3;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  optional bool immutable = 4 [json_name = "immutable,omitempty"];
+  map<string, string> data = 2 [json_name = "data,omitempty"];
+  map<string, bytes> binaryData = 3 [json_name = "binaryData,omitempty"];
 }
 
 message ConfigMapList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated ConfigMap items = 2;
 }
 
 message ComponentCondition {
   optional string type = 1;
   optional string status = 2;
-  optional string message = 3;
-  optional string error = 4;
+  optional string message = 3 [json_name = "message,omitempty"];
+  optional string error = 4 [json_name = "error,omitempty"];
 }
 
 message ComponentStatus {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
-  repeated ComponentCondition conditions = 2;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
+  repeated ComponentCondition conditions = 2 [json_name = "conditions,omitempty"];
 }
 
 message ComponentStatusList {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
   repeated ComponentStatus items = 2;
 }
 
 message DownwardAPIVolumeSource {
-  repeated DownwardAPIVolumeFile items = 1;
-  optional int32 defaultMode = 2;
+  repeated DownwardAPIVolumeFile items = 1 [json_name = "items,omitempty"];
+  optional int32 defaultMode = 2 [json_name = "defaultMode,omitempty"];
 }
 
 message DownwardAPIVolumeFile {
   optional string path = 1;
-  optional ObjectFieldSelector fieldRef = 2;
-  optional ResourceFieldSelector resourceFieldRef = 3;
-  optional int32 mode = 4;
+  optional ObjectFieldSelector fieldRef = 2 [json_name = "fieldRef,omitempty"];
+  optional ResourceFieldSelector resourceFieldRef = 3 [json_name = "resourceFieldRef,omitempty"];
+  optional int32 mode = 4 [json_name = "mode,omitempty"];
 }
 
 message DownwardAPIProjection {
-  repeated DownwardAPIVolumeFile items = 1;
+  repeated DownwardAPIVolumeFile items = 1 [json_name = "items,omitempty"];
 }
 
 message SecurityContext {
-  optional Capabilities capabilities = 1;
-  optional bool privileged = 2;
-  optional SELinuxOptions seLinuxOptions = 3;
-  optional WindowsSecurityContextOptions windowsOptions = 10;
-  optional int64 runAsUser = 4;
-  optional int64 runAsGroup = 8;
-  optional bool runAsNonRoot = 5;
-  optional bool readOnlyRootFilesystem = 6;
-  optional bool allowPrivilegeEscalation = 7;
-  optional string procMount = 9;
-  optional SeccompProfile seccompProfile = 11;
+  optional Capabilities capabilities = 1 [json_name = "capabilities,omitempty"];
+  optional bool privileged = 2 [json_name = "privileged,omitempty"];
+  optional SELinuxOptions seLinuxOptions = 3 [json_name = "seLinuxOptions,omitempty"];
+  optional WindowsSecurityContextOptions windowsOptions = 10 [json_name = "windowsOptions,omitempty"];
+  optional int64 runAsUser = 4 [json_name = "runAsUser,omitempty"];
+  optional int64 runAsGroup = 8 [json_name = "runAsGroup,omitempty"];
+  optional bool runAsNonRoot = 5 [json_name = "runAsNonRoot,omitempty"];
+  optional bool readOnlyRootFilesystem = 6 [json_name = "readOnlyRootFilesystem,omitempty"];
+  optional bool allowPrivilegeEscalation = 7 [json_name = "allowPrivilegeEscalation,omitempty"];
+  optional string procMount = 9 [json_name = "procMount,omitempty"];
+  optional SeccompProfile seccompProfile = 11 [json_name = "seccompProfile,omitempty"];
 }
 
 message SELinuxOptions {
-  optional string user = 1;
-  optional string role = 2;
-  optional string type = 3;
-  optional string level = 4;
+  optional string user = 1 [json_name = "user,omitempty"];
+  optional string role = 2 [json_name = "role,omitempty"];
+  optional string type = 3 [json_name = "type,omitempty"];
+  optional string level = 4 [json_name = "level,omitempty"];
 }
 
 message WindowsSecurityContextOptions {
-  optional string gmsaCredentialSpecName = 1;
-  optional string gmsaCredentialSpec = 2;
-  optional string runAsUserName = 3;
-  optional bool hostProcess = 4;
+  optional string gmsaCredentialSpecName = 1 [json_name = "gmsaCredentialSpecName,omitempty"];
+  optional string gmsaCredentialSpec = 2 [json_name = "gmsaCredentialSpec,omitempty"];
+  optional string runAsUserName = 3 [json_name = "runAsUserName,omitempty"];
+  optional bool hostProcess = 4 [json_name = "hostProcess,omitempty"];
 }
 
 message RangeAllocation {
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+  optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
+  optional string kind = 77772 [json_name = "kind,omitempty"];
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
   optional string range = 2;
   optional bytes data = 3;
 }
@@ -1533,5 +1619,5 @@ message NodeResources {
 message PortStatus {
   optional int32 port = 1;
   optional string protocol = 2;
-  optional string error = 3;
+  optional string error = 3 [json_name = "error,omitempty"];
 }
