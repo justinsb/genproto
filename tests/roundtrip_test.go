@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"reflect"
 	"strings"
@@ -11,7 +12,9 @@ import (
 
 	kubeeeappsv1 "justinsb.com/kubee/api/apps/v1"
 	kubeeecorev1 "justinsb.com/kubee/api/core/v1"
+	kubeeruntime "justinsb.com/kubee/apimachinery/pkg/runtime"
 	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 
 	"github.com/davecgh/go-spew/spew"
 	legacyproto "github.com/golang/protobuf/proto"
@@ -30,7 +33,7 @@ import (
 
 var groups = []runtime.SchemeBuilder{
 	appsv1.SchemeBuilder,
-	// corev1.SchemeBuilder,
+	corev1.SchemeBuilder,
 }
 
 func TestRoundTrip(t *testing.T) {
@@ -124,10 +127,54 @@ func (h *FuzzHarness) TestRoundTripJSON(object runtime.Object) {
 func (h *FuzzHarness) TestRoundTripProto(object runtime.Object) {
 	codec := h.encodings["proto"]
 	protoMarshal := func(obj interface{}) ([]byte, error) {
-		return proto.Marshal(obj.(proto.Message))
+		envelope := &kubeeruntime.Unknown{}
+
+		raw, err := proto.Marshal(obj.(proto.Message))
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling %T: %w", obj, err)
+		}
+		envelope.Raw = raw
+
+		accessor, err := apimeta.TypeAccessor(object)
+		if err != nil {
+			return nil, fmt.Errorf("apimeta.TypeAccessor failed: %w", err)
+		}
+		apiVersion := accessor.GetAPIVersion()
+		kind := accessor.GetKind()
+		envelope.TypeMeta = &kubeeruntime.TypeMeta{
+			ApiVersion: &apiVersion,
+			Kind:       &kind,
+		}
+		b, err := proto.Marshal(envelope)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling envelope: %w", err)
+		}
+
+		magic := []byte{0x6b, 0x38, 0x73, 0x00}
+		b2 := make([]byte, len(b)+4)
+		copy(b2, magic)
+		copy(b2[4:], b)
+		return b2, nil
 	}
 	protoUnmarshal := func(data []byte, obj interface{}) error {
-		return proto.Unmarshal(data, obj.(proto.Message))
+		if len(data) < 4 {
+			return fmt.Errorf("data too short")
+		}
+		if data[0] != 0x6b || data[1] != 0x38 || data[2] != 0x73 || data[3] != 0 {
+			return fmt.Errorf("corrupt proto data (bad magic)")
+		}
+		data = data[4:]
+
+		envelope := &kubeeruntime.Unknown{}
+
+		if err := proto.Unmarshal(data, envelope); err != nil {
+			return fmt.Errorf("error unmarshaling to runtime.Unknown: %w", err)
+		}
+
+		if err := proto.Unmarshal(envelope.GetRaw(), obj.(proto.Message)); err != nil {
+			return fmt.Errorf("error unmarshaling to %T: %w", obj, err)
+		}
+		return nil
 	}
 	h.testRoundTrip(codec, object, protoUnmarshal, protoMarshal)
 }
@@ -218,7 +265,7 @@ func (t *FuzzHarness) testRoundTrip(codec runtime.Codec, object runtime.Object, 
 	if kubee != nil {
 		t.Logf("kubee input: %v", string(data))
 		if err := unmarshal(data, kubee); err != nil {
-			t.Fatalf("error unmarshaling: %v", err)
+			t.Fatalf("FAIL:ERROR: error unmarshaling: %v", err)
 		}
 
 		backToBytes, err := marshal(kubee)
@@ -239,7 +286,6 @@ func (t *FuzzHarness) testRoundTrip(codec runtime.Codec, object runtime.Object, 
 			t.Fatalf("FAIL:DIFF: %v\nCodec: %#v\nSource:\n\n%#v\n\nEncoded:\n\n%s\n\nFinal:\n\n%#v", diff.ObjectReflectDiff(original, obj3), codec, printer.Sprintf("%#v", original), dataAsString(data), printer.Sprintf("%#v", obj3))
 		}
 	}
-
 }
 
 // dataAsString returns the given byte array as a string; handles detecting

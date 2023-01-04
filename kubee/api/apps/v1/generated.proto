@@ -4,13 +4,16 @@ package k8s.io.api.apps.v1;
 
 option go_package = "justinsb.com/kubee/api/apps/v1";
 
+  option (kubee.v1.group_version) = { group: "apps", version: "v1" };
 import "api/core/v1/generated.proto";
 import "apimachinery/pkg/apis/meta/v1/custom.proto";
 import "apimachinery/pkg/apis/meta/v1/generated.proto";
 import "apimachinery/pkg/runtime/generated.proto";
 import "apimachinery/pkg/util/intstr/generated.proto";
+import "kubee/v1/extensions.proto";
 
 message StatefulSet {
+  option (kubee.v1.kind) = { kind: "StatefulSet"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -73,6 +76,7 @@ message StatefulSetCondition {
 }
 
 message StatefulSetList {
+  option (kubee.v1.kind) = { kind: "StatefulSetList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -80,6 +84,7 @@ message StatefulSetList {
 }
 
 message Deployment {
+  option (kubee.v1.kind) = { kind: "Deployment"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -129,6 +134,7 @@ message DeploymentCondition {
 }
 
 message DeploymentList {
+  option (kubee.v1.kind) = { kind: "DeploymentList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -175,6 +181,7 @@ message DaemonSetCondition {
 }
 
 message DaemonSet {
+  option (kubee.v1.kind) = { kind: "DaemonSet"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -183,6 +190,7 @@ message DaemonSet {
 }
 
 message DaemonSetList {
+  option (kubee.v1.kind) = { kind: "DaemonSetList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -190,6 +198,7 @@ message DaemonSetList {
 }
 
 message ReplicaSet {
+  option (kubee.v1.kind) = { kind: "ReplicaSet"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -198,6 +207,7 @@ message ReplicaSet {
 }
 
 message ReplicaSetList {
+  option (kubee.v1.kind) = { kind: "ReplicaSetList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -229,6 +239,7 @@ message ReplicaSetCondition {
 }
 
 message ControllerRevision {
+  option (kubee.v1.kind) = { kind: "ControllerRevision"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -237,6 +248,7 @@ message ControllerRevision {
 }
 
 message ControllerRevisionList {
+  option (kubee.v1.kind) = { kind: "ControllerRevisionList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];

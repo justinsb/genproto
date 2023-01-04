@@ -4,10 +4,12 @@ package k8s.io.api.core.v1;
 
 option go_package = "justinsb.com/kubee/api/core/v1";
 
+  option (kubee.v1.group_version) = { group: "core", version: "v1" };
 import "apimachinery/pkg/api/resource/generated.proto";
 import "apimachinery/pkg/apis/meta/v1/custom.proto";
 import "apimachinery/pkg/apis/meta/v1/generated.proto";
 import "apimachinery/pkg/util/intstr/generated.proto";
+import "kubee/v1/extensions.proto";
 
 message Volume {
   optional string name = 1;
@@ -77,6 +79,7 @@ message PersistentVolumeSource {
 }
 
 message PersistentVolume {
+  option (kubee.v1.kind) = { kind: "PersistentVolume"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -107,6 +110,7 @@ message PersistentVolumeStatus {
 }
 
 message PersistentVolumeList {
+  option (kubee.v1.kind) = { kind: "PersistentVolumeList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -114,6 +118,7 @@ message PersistentVolumeList {
 }
 
 message PersistentVolumeClaim {
+  option (kubee.v1.kind) = { kind: "PersistentVolumeClaim"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -122,6 +127,7 @@ message PersistentVolumeClaim {
 }
 
 message PersistentVolumeClaimList {
+  option (kubee.v1.kind) = { kind: "PersistentVolumeClaimList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -957,6 +963,7 @@ message PodStatus {
 }
 
 message PodStatusResult {
+  option (kubee.v1.kind) = { kind: "PodStatusResult"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -964,6 +971,7 @@ message PodStatusResult {
 }
 
 message Pod {
+  option (kubee.v1.kind) = { kind: "Pod"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -972,6 +980,7 @@ message Pod {
 }
 
 message PodList {
+  option (kubee.v1.kind) = { kind: "PodList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -984,6 +993,7 @@ message PodTemplateSpec {
 }
 
 message PodTemplate {
+  option (kubee.v1.kind) = { kind: "PodTemplate"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -991,6 +1001,7 @@ message PodTemplate {
 }
 
 message PodTemplateList {
+  option (kubee.v1.kind) = { kind: "PodTemplateList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1022,6 +1033,7 @@ message ReplicationControllerCondition {
 }
 
 message ReplicationController {
+  option (kubee.v1.kind) = { kind: "ReplicationController"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1030,6 +1042,7 @@ message ReplicationController {
 }
 
 message ReplicationControllerList {
+  option (kubee.v1.kind) = { kind: "ReplicationControllerList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1091,6 +1104,7 @@ message ServicePort {
 }
 
 message Service {
+  option (kubee.v1.kind) = { kind: "Service"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1099,6 +1113,7 @@ message Service {
 }
 
 message ServiceList {
+  option (kubee.v1.kind) = { kind: "ServiceList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1106,6 +1121,7 @@ message ServiceList {
 }
 
 message ServiceAccount {
+  option (kubee.v1.kind) = { kind: "ServiceAccount"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1115,6 +1131,7 @@ message ServiceAccount {
 }
 
 message ServiceAccountList {
+  option (kubee.v1.kind) = { kind: "ServiceAccountList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1122,6 +1139,7 @@ message ServiceAccountList {
 }
 
 message Endpoints {
+  option (kubee.v1.kind) = { kind: "Endpoints"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1149,6 +1167,7 @@ message EndpointPort {
 }
 
 message EndpointsList {
+  option (kubee.v1.kind) = { kind: "EndpointsList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1259,6 +1278,7 @@ message NodeAddress {
 }
 
 message Node {
+  option (kubee.v1.kind) = { kind: "Node"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1267,6 +1287,7 @@ message Node {
 }
 
 message NodeList {
+  option (kubee.v1.kind) = { kind: "NodeList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1291,6 +1312,7 @@ message NamespaceCondition {
 }
 
 message Namespace {
+  option (kubee.v1.kind) = { kind: "Namespace"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1299,6 +1321,7 @@ message Namespace {
 }
 
 message NamespaceList {
+  option (kubee.v1.kind) = { kind: "NamespaceList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1306,6 +1329,7 @@ message NamespaceList {
 }
 
 message Binding {
+  option (kubee.v1.kind) = { kind: "Binding"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1317,6 +1341,7 @@ message Preconditions {
 }
 
 message PodLogOptions {
+  option (kubee.v1.kind) = { kind: "PodLogOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string container = 1 [json_name = "container,omitempty"];
@@ -1331,6 +1356,7 @@ message PodLogOptions {
 }
 
 message PodAttachOptions {
+  option (kubee.v1.kind) = { kind: "PodAttachOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional bool stdin = 1 [json_name = "stdin,omitempty"];
@@ -1341,6 +1367,7 @@ message PodAttachOptions {
 }
 
 message PodExecOptions {
+  option (kubee.v1.kind) = { kind: "PodExecOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional bool stdin = 1 [json_name = "stdin,omitempty"];
@@ -1352,24 +1379,28 @@ message PodExecOptions {
 }
 
 message PodPortForwardOptions {
+  option (kubee.v1.kind) = { kind: "PodPortForwardOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated int32 ports = 1 [json_name = "ports,omitempty"];
 }
 
 message PodProxyOptions {
+  option (kubee.v1.kind) = { kind: "PodProxyOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string path = 1 [json_name = "path,omitempty"];
 }
 
 message NodeProxyOptions {
+  option (kubee.v1.kind) = { kind: "NodeProxyOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string path = 1 [json_name = "path,omitempty"];
 }
 
 message ServiceProxyOptions {
+  option (kubee.v1.kind) = { kind: "ServiceProxyOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string path = 1 [json_name = "path,omitempty"];
@@ -1396,6 +1427,7 @@ message TypedLocalObjectReference {
 }
 
 message SerializedReference {
+  option (kubee.v1.kind) = { kind: "SerializedReference"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional ObjectReference reference = 1 [json_name = "reference,omitempty"];
@@ -1407,6 +1439,7 @@ message EventSource {
 }
 
 message Event {
+  option (kubee.v1.kind) = { kind: "Event"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
@@ -1432,6 +1465,7 @@ message EventSeries {
 }
 
 message EventList {
+  option (kubee.v1.kind) = { kind: "EventList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1452,6 +1486,7 @@ message LimitRangeSpec {
 }
 
 message LimitRange {
+  option (kubee.v1.kind) = { kind: "LimitRange"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1459,6 +1494,7 @@ message LimitRange {
 }
 
 message LimitRangeList {
+  option (kubee.v1.kind) = { kind: "LimitRangeList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1487,6 +1523,7 @@ message ResourceQuotaStatus {
 }
 
 message ResourceQuota {
+  option (kubee.v1.kind) = { kind: "ResourceQuota"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1495,6 +1532,7 @@ message ResourceQuota {
 }
 
 message ResourceQuotaList {
+  option (kubee.v1.kind) = { kind: "ResourceQuotaList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1502,6 +1540,7 @@ message ResourceQuotaList {
 }
 
 message Secret {
+  option (kubee.v1.kind) = { kind: "Secret"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1512,6 +1551,7 @@ message Secret {
 }
 
 message SecretList {
+  option (kubee.v1.kind) = { kind: "SecretList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1519,6 +1559,7 @@ message SecretList {
 }
 
 message ConfigMap {
+  option (kubee.v1.kind) = { kind: "ConfigMap"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1528,6 +1569,7 @@ message ConfigMap {
 }
 
 message ConfigMapList {
+  option (kubee.v1.kind) = { kind: "ConfigMapList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1542,6 +1584,7 @@ message ComponentCondition {
 }
 
 message ComponentStatus {
+  option (kubee.v1.kind) = { kind: "ComponentStatus"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1549,6 +1592,7 @@ message ComponentStatus {
 }
 
 message ComponentStatusList {
+  option (kubee.v1.kind) = { kind: "ComponentStatusList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -1600,6 +1644,7 @@ message WindowsSecurityContextOptions {
 }
 
 message RangeAllocation {
+  option (kubee.v1.kind) = { kind: "RangeAllocation"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];

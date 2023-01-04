@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package kubee.v1;
+
+option go_package = "justinsb.com/kubee/v1";
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FileOptions { GroupVersion group_version = 50000; }
+
+extend google.protobuf.MessageOptions { Kind kind = 50001; }
+
+message GroupVersion {
+  string group = 1;
+  string version = 2;
+}
+
+message Kind {
+  string kind = 1;
+  string resource = 2;
+}

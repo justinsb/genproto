@@ -4,8 +4,10 @@ package k8s.io.apimachinery.pkg.apis.meta.v1;
 
 option go_package = "justinsb.com/kubee/apimachinery/pkg/apis/meta/v1";
 
+  option (kubee.v1.group_version) = { group: "pkg/apis/meta", version: "v1" };
 import "apimachinery/pkg/apis/meta/v1/custom.proto";
 import "apimachinery/pkg/runtime/generated.proto";
+import "kubee/v1/extensions.proto";
 
 message Duration {
   optional int64 duration = 1;
@@ -86,6 +88,7 @@ message OwnerReference {
 }
 
 message ListOptions {
+  option (kubee.v1.kind) = { kind: "ListOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string labelSelector = 1 [json_name = "labelSelector,omitempty"];
@@ -100,12 +103,14 @@ message ListOptions {
 }
 
 message GetOptions {
+  option (kubee.v1.kind) = { kind: "GetOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string resourceVersion = 1 [json_name = "resourceVersion,omitempty"];
 }
 
 message DeleteOptions {
+  option (kubee.v1.kind) = { kind: "DeleteOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional int64 gracePeriodSeconds = 1 [json_name = "gracePeriodSeconds,omitempty"];
@@ -116,6 +121,7 @@ message DeleteOptions {
 }
 
 message CreateOptions {
+  option (kubee.v1.kind) = { kind: "CreateOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated string dryRun = 1 [json_name = "dryRun,omitempty"];
@@ -124,6 +130,7 @@ message CreateOptions {
 }
 
 message PatchOptions {
+  option (kubee.v1.kind) = { kind: "PatchOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated string dryRun = 1 [json_name = "dryRun,omitempty"];
@@ -133,6 +140,7 @@ message PatchOptions {
 }
 
 message ApplyOptions {
+  option (kubee.v1.kind) = { kind: "ApplyOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated string dryRun = 1 [json_name = "dryRun,omitempty"];
@@ -141,6 +149,7 @@ message ApplyOptions {
 }
 
 message UpdateOptions {
+  option (kubee.v1.kind) = { kind: "UpdateOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated string dryRun = 1 [json_name = "dryRun,omitempty"];
@@ -154,6 +163,7 @@ message Preconditions {
 }
 
 message Status {
+  option (kubee.v1.kind) = { kind: "Status"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -180,6 +190,7 @@ message StatusCause {
 }
 
 message List {
+  option (kubee.v1.kind) = { kind: "List"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional ListMeta metadata = 1 [json_name = "metadata,omitempty"];
@@ -187,6 +198,7 @@ message List {
 }
 
 message APIVersions {
+  option (kubee.v1.kind) = { kind: "APIVersions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated string versions = 1;
@@ -194,12 +206,14 @@ message APIVersions {
 }
 
 message APIGroupList {
+  option (kubee.v1.kind) = { kind: "APIGroupList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   repeated APIGroup groups = 1;
 }
 
 message APIGroup {
+  option (kubee.v1.kind) = { kind: "APIGroup"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string name = 1;
@@ -232,6 +246,7 @@ message APIResource {
 }
 
 message APIResourceList {
+  option (kubee.v1.kind) = { kind: "APIResourceList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string groupVersion = 1;
@@ -271,18 +286,21 @@ message FieldsV1 {
 }
 
 message TableOptions {
+  option (kubee.v1.kind) = { kind: "TableOptions"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional string includeObject = 1 [json_name = "includeObject,omitempty"];
 }
 
 message PartialObjectMetadata {
+  option (kubee.v1.kind) = { kind: "PartialObjectMetadata"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional ObjectMeta metadata = 1 [json_name = "metadata,omitempty"];
 }
 
 message PartialObjectMetadataList {
+  option (kubee.v1.kind) = { kind: "PartialObjectMetadataList"};
   optional string api_version = 77771 [json_name = "apiVersion,omitempty"];
   optional string kind = 77772 [json_name = "kind,omitempty"];
   optional ListMeta metadata = 1 [json_name = "metadata,omitempty"];

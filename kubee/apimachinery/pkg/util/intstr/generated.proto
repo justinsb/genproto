@@ -4,6 +4,8 @@ package k8s.io.apimachinery.pkg.util.intstr;
 
 option go_package = "justinsb.com/kubee/apimachinery/pkg/util/intstr";
 
+  option (kubee.v1.group_version) = { group: "pkg/util", version: "intstr" };
+import "kubee/v1/extensions.proto";
 
 message IntOrString {
   optional int64 type = 1;

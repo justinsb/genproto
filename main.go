@@ -97,6 +97,15 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 
 	if len(packageState.messages) != 0 {
 		pkgPath := pass.Pkg.Path()
+
+		version := filepath.Base(pkgPath)
+		group := filepath.Dir(pkgPath)
+
+		group = strings.TrimPrefix(group, "k8s.io/")
+		group = strings.TrimPrefix(group, "apimachinery/")
+		group = strings.TrimPrefix(group, "apis/")
+		group = strings.TrimPrefix(group, "api/")
+
 		p := filepath.Join("kubee", strings.TrimPrefix(pkgPath, "k8s.io"), "generated.proto")
 
 		var b bytes.Buffer
@@ -112,6 +121,20 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 
 		out.WriteHeader(packageName, goPackageName)
 
+		{
+			groupOption := &descriptorpb.UninterpretedOption{}
+			groupOption.Name = append(groupOption.Name, &descriptorpb.UninterpretedOption_NamePart{
+				NamePart:    PtrTo("kubee.v1.group_version"),
+				IsExtension: PtrTo(true),
+			})
+			s := fmt.Sprintf("{ group: %q", group)
+			s += fmt.Sprintf(", version: %q", version)
+			s += " }"
+			groupOption.AggregateValue = PtrTo(s)
+			g.pkg.imports["kubee/v1/extensions.proto"] = true
+			out.WriteOption(groupOption)
+		}
+
 		if len(packageState.imports) != 0 {
 			var imports []string
 			for imported := range packageState.imports {
@@ -120,7 +143,7 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 				}
 				imported = strings.Replace(imported, "k8s.io/", "", 1)
 
-				imports = append(imports, imported+"/generated.proto")
+				imports = append(imports, imported)
 			}
 			if goPackageName == "justinsb.com/kubee/apimachinery/pkg/apis/meta/v1" {
 				imports = append(imports, "apimachinery/pkg/apis/meta/v1/custom.proto")
@@ -407,7 +430,7 @@ func (g *Generator) visitTypeSpec(spec *ast.TypeSpec) error {
 	case "Time":
 		klog.Warningf("TODO: Should handle protobuf.as comment, hard-coding type %q", spec.Name.String())
 		generateProto = false
-	case "IntOrString", "RawExtension", "Unknown":
+	case "IntOrString", "RawExtension", "Unknown", "TypeMeta":
 		klog.Warningf("TODO: Should handle protobuf=true comment, hard-coding type %q", spec.Name.String())
 		generateProto = true
 	}
@@ -553,6 +576,19 @@ func (g *Generator) visitStructType(name string, spec *ast.StructType) error {
 					msg.Field = append(msg.Field, fd)
 				}
 
+				if msg.Options == nil {
+					msg.Options = &descriptorpb.MessageOptions{}
+				}
+				kindOption := &descriptorpb.UninterpretedOption{}
+				kindOption.Name = append(kindOption.Name, &descriptorpb.UninterpretedOption_NamePart{
+					NamePart:    PtrTo("kubee.v1.kind"),
+					IsExtension: PtrTo(true),
+				})
+				s := fmt.Sprintf("{ kind: %q", msg.GetName())
+				s += "}"
+				kindOption.AggregateValue = PtrTo(s)
+				g.pkg.imports["kubee/v1/extensions.proto"] = true
+				msg.Options.UninterpretedOption = append(msg.Options.UninterpretedOption, kindOption)
 				continue
 			} else {
 				klog.Warningf("skipping field with no proto tag %v", prototext.Format(f))
@@ -641,7 +677,7 @@ func (g *Generator) populateProtoFieldDescriptorWithTypeInfo(msg *descriptorpb.D
 			fd.Type = descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum()
 			pkg := typeInfo.Obj().Pkg()
 			if pkg != g.Pass.Pkg {
-				g.pkg.imports[pkg.Path()] = true
+				g.pkg.imports[pkg.Path()+"/generated.proto"] = true
 			}
 			typeName = g.protoNameForMessage(typeInfo)
 		case *types.Basic:
@@ -771,7 +807,9 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 	tagValue = strings.Trim(tagValue, "`")
 	tags := strings.Fields(tagValue)
 	for _, tag := range tags {
-		if strings.HasPrefix(tag, "json:\"") {
+		if strings.HasPrefix(tag, "yaml:\"") {
+			klog.Warningf("ignoring yaml tag %+v", tag)
+		} else if strings.HasPrefix(tag, "json:\"") {
 			if !strings.HasSuffix(tag, "\"") {
 				return fmt.Errorf("unimplemented tag %+v", tag)
 			}

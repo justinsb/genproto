@@ -68,9 +68,33 @@ func (w *ProtoWriter) WriteImport(p string) {
 	w.format("import %q;\n", p)
 }
 
+func (w *ProtoWriter) WriteOption(opt *descriptorpb.UninterpretedOption) {
+	name := ""
+	for _, n := range opt.Name {
+		if name != "" {
+			name += "."
+		}
+		if n.GetIsExtension() {
+			name += "(" + n.GetNamePart() + ")"
+		} else {
+			name += n.GetNamePart()
+		}
+	}
+
+	// TODO: No idea if this is right; it works for generation but I think we'd like to be consistent with the generated proto...
+	value := opt.GetAggregateValue()
+
+	w.format("  option %s = %s;\n", name, value)
+}
+
 func (w *ProtoWriter) WriteMessage(m *descriptorpb.DescriptorProto) {
 	w.format("\n")
 	w.format("message %s {\n", m.GetName())
+
+	for _, opt := range m.GetOptions().GetUninterpretedOption() {
+		w.WriteOption(opt)
+	}
+
 	for _, field := range m.Field {
 		w.writeField(m, field)
 	}

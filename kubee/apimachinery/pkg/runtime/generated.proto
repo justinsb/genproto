@@ -4,7 +4,21 @@ package k8s.io.apimachinery.pkg.runtime;
 
 option go_package = "justinsb.com/kubee/apimachinery/pkg/runtime";
 
+  option (kubee.v1.group_version) = { group: "pkg", version: "runtime" };
+import "kubee/v1/extensions.proto";
+
+message TypeMeta {
+  optional string apiVersion = 1 [json_name = "apiVersion,omitempty"];
+  optional string kind = 2 [json_name = "kind,omitempty"];
+}
 
 message RawExtension {
   optional bytes raw = 1 [json_name = "-"];
+}
+
+message Unknown {
+  optional TypeMeta typeMeta = 1 [json_name = ",inline"];
+  optional bytes raw = 2;
+  optional string contentEncoding = 3;
+  optional string contentType = 4;
 }
