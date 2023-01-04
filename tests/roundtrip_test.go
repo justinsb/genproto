@@ -255,14 +255,12 @@ var kubeeGroups = []protoreflect.FileDescriptor{
 }
 
 func TestRoundTrip(t *testing.T) {
-	h := NewFuzzHarness(t)
-
 	rand.Seed(time.Now().UnixNano())
 
-	seed := rand.Int63()
-	fuzzer := fuzzer.FuzzerFor(genericfuzzer.Funcs, rand.NewSource(seed), h.codecs)
+	h := NewFuzzHarness(t)
 
 	for gvk := range h.scheme.AllKnownTypes() {
+		gvk := gvk
 		if gvk.Version == "__internal" {
 			continue
 		}
@@ -276,7 +274,14 @@ func TestRoundTrip(t *testing.T) {
 			continue
 		}
 		for encoding := range h.encodings {
+			encoding := encoding
+
 			h.Run(encoding+"/"+name, func(h *FuzzHarness) {
+				h.Parallel()
+
+				seed := rand.Int63()
+				fuzzer := fuzzer.FuzzerFor(genericfuzzer.Funcs, rand.NewSource(seed), h.codecs)
+
 				var object runtime.Object
 				object, err := h.scheme.New(gvk)
 				if err != nil {
@@ -321,6 +326,7 @@ func (h *FuzzHarness) Run(name string, fn func(h *FuzzHarness)) {
 		fn(&h2)
 	})
 }
+
 func NewFuzzHarness(t *testing.T) *FuzzHarness {
 	scheme := runtime.NewScheme()
 	codecs := serializer.NewCodecFactory(scheme)
