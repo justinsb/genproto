@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package kubee.v1;
 
-option go_package = "justinsb.com/kubee/v1";
+option go_package = "justinsb.com/kubee/kubee/v1";
 
 import "google/protobuf/descriptor.proto";
 

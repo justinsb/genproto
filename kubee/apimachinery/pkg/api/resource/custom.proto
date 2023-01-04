@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package k8s.io.apimachinery.pkg.api.resource;
+
+// Package-wide variables from generator "generated".
+option go_package = "k8s.io/apimachinery/pkg/api/resource";
+
+message Quantity {
+  optional string string = 1;
+}

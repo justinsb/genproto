@@ -17,7 +17,7 @@ message RawExtension {
 }
 
 message Unknown {
-  optional TypeMeta typeMeta = 1 [json_name = ",inline"];
+  optional TypeMeta TypeMeta = 1 [json_name = ",inline"];
   optional bytes raw = 2;
   optional string contentEncoding = 3;
   optional string contentType = 4;

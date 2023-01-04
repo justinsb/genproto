@@ -4,8 +4,8 @@ package k8s.io.api.core.v1;
 
 option go_package = "justinsb.com/kubee/api/core/v1";
 
-  option (kubee.v1.group_version) = { group: "core", version: "v1" };
-import "apimachinery/pkg/api/resource/generated.proto";
+  option (kubee.v1.group_version) = { group: "", version: "v1" };
+import "apimachinery/pkg/api/resource/custom.proto";
 import "apimachinery/pkg/apis/meta/v1/custom.proto";
 import "apimachinery/pkg/apis/meta/v1/generated.proto";
 import "apimachinery/pkg/util/intstr/generated.proto";
@@ -13,7 +13,7 @@ import "kubee/v1/extensions.proto";
 
 message Volume {
   optional string name = 1;
-  optional VolumeSource volumeSource = 2 [json_name = ",inline"];
+  optional VolumeSource VolumeSource = 2 [json_name = ",inline"];
 }
 
 message VolumeSource {
@@ -89,7 +89,7 @@ message PersistentVolume {
 
 message PersistentVolumeSpec {
   map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> capacity = 1 [json_name = "capacity,omitempty"];
-  optional PersistentVolumeSource persistentVolumeSource = 2 [json_name = ",inline"];
+  optional PersistentVolumeSource PersistentVolumeSource = 2 [json_name = ",inline"];
   repeated string accessModes = 3 [json_name = "accessModes,omitempty"];
   optional ObjectReference claimRef = 4 [json_name = "claimRef,omitempty"];
   optional string persistentVolumeReclaimPolicy = 5 [json_name = "persistentVolumeReclaimPolicy,omitempty"];
@@ -310,7 +310,7 @@ message SecretVolumeSource {
 }
 
 message SecretProjection {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional LocalObjectReference LocalObjectReference = 1 [json_name = ",inline"];
   repeated KeyToPath items = 2 [json_name = "items,omitempty"];
   optional bool optional = 4 [json_name = "optional,omitempty"];
 }
@@ -440,14 +440,14 @@ message StorageOSPersistentVolumeSource {
 }
 
 message ConfigMapVolumeSource {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional LocalObjectReference LocalObjectReference = 1 [json_name = ",inline"];
   repeated KeyToPath items = 2 [json_name = "items,omitempty"];
   optional int32 defaultMode = 3 [json_name = "defaultMode,omitempty"];
   optional bool optional = 4 [json_name = "optional,omitempty"];
 }
 
 message ConfigMapProjection {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional LocalObjectReference LocalObjectReference = 1 [json_name = ",inline"];
   repeated KeyToPath items = 2 [json_name = "items,omitempty"];
   optional bool optional = 4 [json_name = "optional,omitempty"];
 }
@@ -558,13 +558,13 @@ message ResourceFieldSelector {
 }
 
 message ConfigMapKeySelector {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional LocalObjectReference LocalObjectReference = 1 [json_name = ",inline"];
   optional string key = 2;
   optional bool optional = 3 [json_name = "optional,omitempty"];
 }
 
 message SecretKeySelector {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional LocalObjectReference LocalObjectReference = 1 [json_name = ",inline"];
   optional string key = 2;
   optional bool optional = 3 [json_name = "optional,omitempty"];
 }
@@ -576,12 +576,12 @@ message EnvFromSource {
 }
 
 message ConfigMapEnvSource {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional LocalObjectReference LocalObjectReference = 1 [json_name = ",inline"];
   optional bool optional = 2 [json_name = "optional,omitempty"];
 }
 
 message SecretEnvSource {
-  optional LocalObjectReference localObjectReference = 1 [json_name = ",inline"];
+  optional LocalObjectReference LocalObjectReference = 1 [json_name = ",inline"];
   optional bool optional = 2 [json_name = "optional,omitempty"];
 }
 
@@ -613,7 +613,7 @@ message ExecAction {
 }
 
 message Probe {
-  optional ProbeHandler handler = 1 [json_name = ",inline"];
+  optional ProbeHandler ProbeHandler = 1 [json_name = ",inline"];
   optional int32 initialDelaySeconds = 2 [json_name = "initialDelaySeconds,omitempty"];
   optional int32 timeoutSeconds = 3 [json_name = "timeoutSeconds,omitempty"];
   optional int32 periodSeconds = 4 [json_name = "periodSeconds,omitempty"];

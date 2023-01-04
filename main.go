@@ -101,13 +101,45 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 		version := filepath.Base(pkgPath)
 		group := filepath.Dir(pkgPath)
 
+		if strings.HasPrefix(group, "k8s.io/api/") {
+			group = strings.TrimPrefix(group, "k8s.io/api/")
+			group += ".k8s.io"
+		}
+
 		group = strings.TrimPrefix(group, "k8s.io/")
 		group = strings.TrimPrefix(group, "apimachinery/")
 		group = strings.TrimPrefix(group, "apis/")
 		group = strings.TrimPrefix(group, "api/")
 
+		// TODO: Parse the group annotations
+		switch group {
+		case "core.k8s.io":
+			group = ""
+		case "apps.k8s.io":
+			group = "apps"
+		case "batch.k8s.io":
+			group = "batch"
+		case "extensions.k8s.io":
+			group = "extensions"
+		case "autoscaling.k8s.io":
+			group = "autoscaling"
+		case "policy.k8s.io":
+			group = "policy"
+		case "rbac.k8s.io":
+			group = "rbac.authorization.k8s.io"
+		case "flowcontrol.k8s.io":
+			group = "flowcontrol.apiserver.k8s.io"
+		case "apiserverinternal.k8s.io":
+			group = "internal.apiserver.k8s.io"
+		}
+
 		p := filepath.Join("kubee", strings.TrimPrefix(pkgPath, "k8s.io"), "generated.proto")
 
+		importCustom := ""
+		customProtoPath := filepath.Join(filepath.Dir(p), "custom.proto")
+		if _, err := os.Stat(customProtoPath); err == nil {
+			importCustom = strings.TrimPrefix(customProtoPath, "kubee/")
+		}
 		var b bytes.Buffer
 
 		out := &ProtoWriter{
@@ -141,19 +173,31 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 				if imported == pass.Pkg.Path() {
 					continue
 				}
+
 				imported = strings.Replace(imported, "k8s.io/", "", 1)
+
+				// TODO: We need something more sustainable here... maybe merge the custom into the generated?
+				if imported == "apimachinery/pkg/api/resource/generated.proto" {
+					imported = "apimachinery/pkg/api/resource/custom.proto"
+				}
 
 				imports = append(imports, imported)
 			}
-			if goPackageName == "justinsb.com/kubee/apimachinery/pkg/apis/meta/v1" {
-				imports = append(imports, "apimachinery/pkg/apis/meta/v1/custom.proto")
-			}
+			// if goPackageName == "justinsb.com/kubee/apimachinery/pkg/apis/meta/v1" {
+			// 	imports = append(imports, "apimachinery/pkg/apis/meta/v1/custom.proto")
+			// }
+
 			// We need to explicitly import custom protos (?)
 			for _, imported := range imports {
 				if imported == "apimachinery/pkg/apis/meta/v1/generated.proto" {
 					imports = append(imports, "apimachinery/pkg/apis/meta/v1/custom.proto")
 				}
 			}
+
+			if importCustom != "" {
+				imports = append(imports, importCustom)
+			}
+
 			sort.Strings(imports)
 
 			for _, imported := range imports {
@@ -427,7 +471,7 @@ func (g *Generator) visitTypeSpec(spec *ast.TypeSpec) error {
 	case "Table", "TableRow", "TableRowCondition", "TableColumnDefinition":
 		klog.Warningf("TODO: Should handle protobuf=false comment, hard-coding type %q", spec.Name.String())
 		generateProto = false
-	case "Time":
+	case "Time", "MicroTime":
 		klog.Warningf("TODO: Should handle protobuf.as comment, hard-coding type %q", spec.Name.String())
 		generateProto = false
 	case "IntOrString", "RawExtension", "Unknown", "TypeMeta":
@@ -796,6 +840,14 @@ func (g *Generator) populateMap(msg *descriptorpb.DescriptorProto, fd *descripto
 	if err := g.populateProtoFieldDescriptorWithTypeInfo(nestedType, valueField, mapType.Elem()); err != nil {
 		return err
 	}
+
+	// Special case: map<string, []string> ....
+	switch typeInfo := mapType.Elem().(type) {
+	case *types.Named:
+		valueField.Type = descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum()
+		typeName := g.protoNameForMessage(typeInfo)
+		valueField.TypeName = &typeName
+	}
 	return nil
 }
 
@@ -804,6 +856,8 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 	if !strings.HasPrefix(tagValue, "`") || !strings.HasSuffix(tagValue, "`") {
 		return fmt.Errorf("expected tags to be surrounded by `")
 	}
+	isJSONInline := false
+
 	tagValue = strings.Trim(tagValue, "`")
 	tags := strings.Fields(tagValue)
 	for _, tag := range tags {
@@ -837,6 +891,7 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 			if inline {
 				klog.Warningf("ignoring inline for %v", formatProto(fd))
 				jsonName += ",inline"
+				isJSONInline = true
 			}
 			fd.JsonName = &jsonName
 		} else if strings.HasPrefix(tag, "protobuf:\"") {
@@ -952,6 +1007,13 @@ func (g *Generator) populateProtoFieldFromTag(fd *descriptorpb.FieldDescriptorPr
 		if jsonName == fd.GetName() {
 			fd.JsonName = nil
 		}
+	}
+
+	if isJSONInline && fd.GetNumber() != 0 {
+		typeName := fd.GetTypeName()
+		lastDot := strings.LastIndex(typeName, ".")
+		typeName = typeName[lastDot+1:]
+		fd.Name = &typeName
 	}
 
 	return nil
