@@ -4,7 +4,7 @@ package k8s.io.apimachinery.pkg.apis.meta.v1;
 
 option go_package = "justinsb.com/kubee/apimachinery/pkg/apis/meta/v1";
 
-  option (kubee.v1.group_version) = { group: "pkg/apis/meta", version: "v1" };
+  option (kubee.v1.group_version) = { group: "", version: "v1" };
 import "apimachinery/pkg/apis/meta/v1/custom.proto";
 import "apimachinery/pkg/runtime/generated.proto";
 import "kubee/v1/extensions.proto";

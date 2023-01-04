@@ -113,7 +113,7 @@ func (g *Generator) Run(pass *analysis.Pass) (interface{}, error) {
 
 		// TODO: Parse the group annotations
 		switch group {
-		case "core.k8s.io":
+		case "core.k8s.io", "pkg/apis/meta":
 			group = ""
 		case "apps.k8s.io":
 			group = "apps"
