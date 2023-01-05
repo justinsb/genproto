@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"crypto/tls"
 	"crypto/x509"
@@ -86,6 +87,21 @@ func run(ctx context.Context) error {
 		// TODO: Eliminate need for GetMetadata call
 		fmt.Printf("%s\t%s\t%v\n", ns.GetMetadata().GetName(), ns.GetStatus().GetPhase(), age)
 	}
+
+	watchChan, err := client.WatchNamespaces(ctx).Do()
+	if err != nil {
+		return fmt.Errorf("error from WatchNamespaces: %w", err)
+	}
+	for {
+		ev, ok := <-watchChan
+		if !ok {
+			break
+		}
+		if ev.Err != nil {
+			return ev.Err
+		}
+		fmt.Printf("%s\t%s\t%v\n", ev.Type, ev.Object.GetMetadata().GetName(), ev.Object.GetStatus().GetPhase())
+	}
 	return nil
 }
 
@@ -143,6 +159,10 @@ func (c *Client) GetNamespaces(ctx context.Context) *Request[corev1.NamespaceLis
 	return buildRequest[corev1.NamespaceList](ctx, c, "api", "v1", "namespaces")
 }
 
+func (c *Client) WatchNamespaces(ctx context.Context) *WatchRequest[corev1.Namespace] {
+	return buildWatchRequest[corev1.Namespace](ctx, c, "api", "v1", "namespaces")
+}
+
 type Request[T any] struct {
 	httpRequest *http.Request
 	client      *Client
@@ -187,4 +207,87 @@ func buildRequest[T any](ctx context.Context, client *Client, relativePath ...st
 		client:      client,
 		err:         err,
 	}
+}
+
+func buildWatchRequest[T any](ctx context.Context, client *Client, relativePath ...string) *WatchRequest[T] {
+	endpoint := client.baseURL.JoinPath(relativePath...)
+	q := url.Values{}
+	q.Set("watch", "true")
+	endpoint.RawQuery = q.Encode()
+
+	httpRequest, err := http.NewRequestWithContext(ctx, "GET", endpoint.String(), nil)
+	return &WatchRequest[T]{
+		httpRequest: httpRequest,
+		client:      client,
+		err:         err,
+	}
+}
+
+type WatchRequest[T any] struct {
+	httpRequest *http.Request
+	client      *Client
+	err         error
+}
+
+type WatchEvent[T any] struct {
+	Type   string
+	Object *T
+	Err    error
+}
+
+type watchEventDecode[T any] struct {
+	Type   string `json:"type"`
+	Object *T     `json:"object"`
+}
+
+func (r *WatchRequest[T]) Do() (chan WatchEvent[T], error) {
+	httpResponse, err := r.client.httpClient.Do(r.httpRequest)
+	if err != nil {
+		return nil, fmt.Errorf("error from http request: %w", err)
+	}
+
+	if httpResponse.StatusCode != 200 {
+		return nil, fmt.Errorf("unexpected response status %q", httpResponse.Status)
+	}
+
+	watchEventChan := make(chan WatchEvent[T])
+
+	scanner := bufio.NewScanner(httpResponse.Body)
+
+	go func() {
+		defer httpResponse.Body.Close()
+		for {
+			if !scanner.Scan() {
+				err := scanner.Err()
+				if err != nil {
+					watchEventChan <- WatchEvent[T]{
+						Type: "Error",
+						Err:  err,
+					}
+				}
+
+				close(watchEventChan)
+				return
+			}
+
+			line := scanner.Bytes()
+			klog.Infof("got watch line %s", string(line))
+			var d watchEventDecode[T]
+
+			if err := json.Unmarshal(line, &d); err != nil {
+				watchEventChan <- WatchEvent[T]{
+					Type: "Error",
+					Err:  err,
+				}
+				close(watchEventChan)
+				return
+			}
+			watchEventChan <- WatchEvent[T]{
+				Type:   d.Type,
+				Object: d.Object,
+			}
+		}
+	}()
+
+	return watchEventChan, nil
 }
