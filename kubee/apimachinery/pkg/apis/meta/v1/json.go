@@ -47,6 +47,11 @@ func (t Time) MarshalJSON() ([]byte, error) {
 	return buf, nil
 }
 
+func (t Time) Time() time.Time {
+	tt := time.Unix(t.GetSeconds(), int64(t.GetNanos()))
+	return tt.UTC()
+}
+
 const RFC3339Micro = "2006-01-02T15:04:05.000000Z07:00"
 
 // UnmarshalJSON implements the json.Unmarshaller interface.
